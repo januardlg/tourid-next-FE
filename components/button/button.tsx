@@ -11,8 +11,8 @@ const Button = ({ type = 'PRIMARY', children, onClick }: IButton) => {
         <button onClick={onClick}
             className={cn(
                 'py-3 px-4 text-white rounded-lg',
-                { 'bg-tid-primary-100': type === 'PRIMARY' },
-                { 'border border-tid-primary-100 text-tid-primary-100': type === 'OUTLINE' }
+                { 'bg-tid-red-100': type === 'PRIMARY' },
+                { 'border border-tid-red-100 text-tid-red-100': type === 'OUTLINE' }
             )}
         >
             {children}

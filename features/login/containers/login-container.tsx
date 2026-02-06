@@ -30,7 +30,7 @@ const LoginContainer = () => {
     return (
         <section className="w-full h-full flex flex-col justify-center items-center">
             <div className="space-y-3 w-full text-center">
-                <p className="text-tid-primary-100 text-[32px]"> Welcome</p>
+                <p className="text-tid-red-100 text-[32px]"> Welcome</p>
                 <p className="text-tid-grey-100"> Login with Username</p>
             </div>
 
@@ -46,13 +46,13 @@ const LoginContainer = () => {
                         </Button>
                         <div className="w-full mt-5 grid grid-cols-12 items-center">
                             <div className="col-span-5">
-                                <div className="h-px bg-tid-primary-100"></div>
+                                <div className="h-px bg-tid-red-100"></div>
                             </div>
                             <div className="col-span-2">
-                                <p className="text-center font-semibold text-tid-primary-100"> OR </p>
+                                <p className="text-center font-semibold text-tid-red-100"> OR </p>
                             </div>
                             <div className="col-span-5">
-                                <div className="h-px bg-tid-primary-100"></div>
+                                <div className="h-px bg-tid-red-100"></div>
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@ const LoginContainer = () => {
                     </Button>
                 </div>
 
-                <p className="text-center text-tid-grey-100 text-sm">Don’t have account? <span><Link href={'/register'} className="text-tid-primary-100"> Register Now</Link></span> </p>
+                <p className="text-center text-tid-grey-100 text-sm">Don’t have account? <span><Link href={'/register'} className="text-tid-red-100"> Register Now</Link></span> </p>
 
             </div>
 

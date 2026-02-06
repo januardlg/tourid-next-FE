@@ -32,8 +32,8 @@ const RegisterContainer = () => {
     return (
         <section className="w-full h-full flex flex-col justify-center items-center">
             <div className="space-y-3 w-full text-center">
-                <p className="text-tid-primary-100 text-[32px]"> Create Account</p>
-                <p className="text-tid-grey-100"> By creating an account, you agree to our <span className="text-tid-primary-100"> Privacy policy </span> and <span className="text-tid-primary-100">Terms </span>  of use.</p>
+                <p className="text-tid-red-100 text-[32px]"> Create Account</p>
+                <p className="text-tid-grey-100"> By creating an account, you agree to our <span className="text-tid-red-100"> Privacy policy </span> and <span className="text-tid-red-100">Terms </span>  of use.</p>
             </div>
 
             <div className="space-y-5 w-full mt-6">
@@ -50,13 +50,13 @@ const RegisterContainer = () => {
                         </Button>
                         <div className="w-full mt-5 grid grid-cols-12 items-center">
                             <div className="col-span-5">
-                                <div className="h-px bg-tid-primary-100"></div>
+                                <div className="h-px bg-tid-red-100"></div>
                             </div>
                             <div className="col-span-2">
-                                <p className="text-center font-semibold text-tid-primary-100"> OR </p>
+                                <p className="text-center font-semibold text-tid-red-100"> OR </p>
                             </div>
                             <div className="col-span-5">
-                                <div className="h-px bg-tid-primary-100"></div>
+                                <div className="h-px bg-tid-red-100"></div>
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@ const RegisterContainer = () => {
                     </Button>
                 </div>
 
-                <p className="text-center text-tid-grey-100 text-sm">Already have an account? <span><Link href={'/login'} className="text-tid-primary-100"> Login</Link></span> </p>
+                <p className="text-center text-tid-grey-100 text-sm">Already have an account? <span><Link href={'/login'} className="text-tid-red-100"> Login</Link></span> </p>
 
             </div>
 
