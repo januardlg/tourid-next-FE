@@ -92,7 +92,7 @@ const Footer = () => {
                 </div>
             </section>
             <section className="mt-8">
-                <p>© 2026 <span className="text-tid-primary-100">MVP Portofolio</span> . All Rights Reserved</p>
+                <p>© 2026 <span className="text-tid-red-100">MVP Portofolio</span> . All Rights Reserved</p>
             </section>
         </footer>
     )

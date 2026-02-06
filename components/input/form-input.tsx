@@ -10,8 +10,8 @@ export interface IInputForm {
 const FormInput = ({ name, value, placehodler, onChange }: IInputForm) => {
     return (
         <input className={cn(
-            "w-full p-4 border border-tid-primary-100 rounded-lg",
-            "focus:outline-tid-primary-100 focus:outline-1"
+            "w-full p-4 border border-tid-red-100 rounded-lg",
+            "focus:outline-tid-red-100 focus:outline-1"
         )} type="text" name={name} value={value} placeholder={placehodler} onChange={onChange} />
     )
 }
