@@ -37,10 +37,10 @@ const RegisterContainer = () => {
             </div>
 
             <div className="space-y-5 w-full mt-6">
-                <FormInput name="username" value={value.username} onChange={handleChangeInput} placehodler="Enter Username" />
-                <FormInput name="email" value={value.email} onChange={handleChangeInput} placehodler="Enter Email" />
-                <FormInput name="password" value={value.password} onChange={handleChangeInput} placehodler="Enter Password" />
-                <FormInput name="repassword" value={value.repassword} onChange={handleChangeInput} placehodler="Re Enter Password" />
+                <FormInput name="username" value={value.username} onChange={handleChangeInput} placeholder="Enter Username" />
+                <FormInput name="email" value={value.email} onChange={handleChangeInput} placeholder="Enter Email" />
+                <FormInput name="password" value={value.password} onChange={handleChangeInput} placeholder="Enter Password" />
+                <FormInput name="repassword" value={value.repassword} onChange={handleChangeInput} placeholder="Re Enter Password" />
 
 
                 <div className="flex justify-center">
