@@ -1,24 +1,32 @@
 "use client";
+
+import React, { useState } from 'react'
+import ListBoxTid, { IListOption } from '@/features/home/components/list-box';
+import { cn } from '@/lib/utils';
+
+const filterByOptions: IListOption[] = [
+  { id: 'name_package', name: 'Package Name' },
+  // { id: 'start_date', name: 'Start Date' },
+  { id: 'description', name: 'Description' },
+]
+
 const SearchCategory = () => {
+  const [filterBy, setFilterBy] = useState(filterByOptions[0])
+
+  const [filterValue, setFilterValue] = useState('')
+
+  const handleChangeInputFilterValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterValue(e.target.value)
+  }
+
   return (
-    <>
-      <p className="block mb-2 text-base font-bold w-full">Search</p>
+    <div className='grid grid-cols-2 shadow-xl'>
+      <ListBoxTid value={filterBy} onChange={setFilterBy} listOptions={filterByOptions} />
       <div>
-        <div className="block w-full relative">
-          <select className="border text-base rounded-sm block w-fit py-2.5 px-4 focus:outline-none shadow-md appearance-none ">
-            <option
-              selected
-              className="text-sm border-none py-2.5 px-4 appearance-non "
-            >
-              Select a category
-            </option>
-            <option className="text-sm" value="US">
-              United States
-            </option>
-          </select>
-        </div>
+        <input className={cn('w-full py-2.5 px-4 border-t border-r  border-b border-tid-grey-200 rounded-tr-sm rounded-br-sm bg-white', 'focus:outline-none ')} placeholder='Input Search' name='filterValue' value={filterValue} onChange={handleChangeInputFilterValue} />
       </div>
-    </>
-  );
+    </div >
+  )
+
 };
 export default SearchCategory;
