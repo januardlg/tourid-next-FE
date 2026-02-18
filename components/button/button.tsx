@@ -10,7 +10,7 @@ const Button = ({ type = 'PRIMARY', children, onClick }: IButton) => {
     return (
         <button onClick={onClick}
             className={cn(
-                'py-3 px-4 text-white rounded-lg',
+                'py-3 px-4 text-white rounded-sm w-full cursor-pointer',
                 { 'bg-tid-red-100': type === 'PRIMARY' },
                 { 'border border-tid-red-100 text-tid-red-100': type === 'OUTLINE' }
             )}

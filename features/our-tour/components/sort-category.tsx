@@ -32,7 +32,7 @@ const SortCategory = () => {
     return (
         <div className='flex-align-items-center shadow-lg w-fit'>
 
-            <ListBoxTid value={sortingBy} onChange={setFilterBy} listOptions={sortingByOptions} />
+            <ListBoxTid value={sortingBy} onChange={setFilterBy} listOptions={sortingByOptions} isInputGroup={true} />
 
             <div className={cn('h-full py-2.5 px-3 w-fit border-t border-r  border-b border-tid-grey-200  rounded-tr-sm rounded-br-sm cursor-pointer '
             )}

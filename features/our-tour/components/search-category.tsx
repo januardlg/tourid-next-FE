@@ -21,7 +21,7 @@ const SearchCategory = () => {
 
   return (
     <div className='grid grid-cols-2 shadow-xl'>
-      <ListBoxTid value={filterBy} onChange={setFilterBy} listOptions={filterByOptions} />
+      <ListBoxTid value={filterBy} onChange={setFilterBy} listOptions={filterByOptions} isInputGroup={true} />
       <div>
         <input className={cn('w-full py-2.5 px-4 border-t border-r  border-b border-tid-grey-200 rounded-tr-sm rounded-br-sm bg-white', 'focus:outline-none ')} placeholder='Input Search' name='filterValue' value={filterValue} onChange={handleChangeInputFilterValue} />
       </div>
