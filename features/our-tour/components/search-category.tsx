@@ -5,6 +5,7 @@ import ListBoxTid, { IListOption } from '@/features/home/components/list-box';
 import { cn } from '@/lib/utils';
 
 const filterByOptions: IListOption[] = [
+  { id: 'option', name: 'Select Category', disabled: true },
   { id: 'name_package', name: 'Package Name' },
   // { id: 'start_date', name: 'Start Date' },
   { id: 'description', name: 'Description' },
