@@ -18,7 +18,7 @@ const ProductCard = () => {
                     <p className="text-xs text-tid-grey-100">Start From</p>
                     <p className="text-md text-tid-red-100 font-semibold">Rp 350.000 / person</p>
                 </div>
-                <ButtonLink href="/">Detail</ButtonLink>
+                <ButtonLink href="/our-tour/1">Detail</ButtonLink>
             </div>
         </div>
     )
