@@ -12,7 +12,7 @@ const SubscribeFormInput = () => {
 
   return (
     <div className="flex justify-center items-center gap-4 mt-10">
-      <div className="w-fit">
+      <div className="min-w-100">
         <FormInput
           name="email"
           placeholder="Your Email"
@@ -20,9 +20,11 @@ const SubscribeFormInput = () => {
           value={email}
         />
       </div>
-      <Button type="PRIMARY" onClick={() => {}}>
-        Subscribe
-      </Button>
+      <div>
+        <Button type="PRIMARY" onClick={() => { }}>
+          Subscribe
+        </Button>
+      </div>
     </div>
   );
 };
