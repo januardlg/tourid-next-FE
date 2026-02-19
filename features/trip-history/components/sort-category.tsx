@@ -7,8 +7,11 @@ import SortAscIcon from '@/components/icons/sort-asc-icon';
 import SortDescIcon from '@/components/icons/sort-desc-icon';
 
 const sortingByOptions: IListOption[] = [
+    {
+        id: 'option', name: 'Select Category', disabled: true
+    },
     { id: 'start_date', name: 'Start Date' },
-    { id: 'quota', name: 'Quota' },
+    { id: 'transaction', name: 'Trasaction Date' },
 ]
 
 type SortingType = 'asc' | 'desc'
