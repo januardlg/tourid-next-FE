@@ -47,4 +47,10 @@ body {
     font-weight: 300;
     color: #6E7074;
   }
+
+  .admin-feature-container {
+    height: calc(100vh - 100px);
+    background: #F8FAFC;
+    padding: 20px 24px;
+  }
 }
