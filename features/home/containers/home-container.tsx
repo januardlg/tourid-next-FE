@@ -1,6 +1,16 @@
+import FeaturedTour from "../components/featured-tour"
+import HeroComponent from "../components/hero"
+import StepOrder from "../components/step-order"
+import SubscribeForm from "../components/subscribe-form"
+
 const HomeContainer = () => {
     return (
-        <h1>Home Container</h1>
+        <>
+            <HeroComponent />
+            <FeaturedTour />
+            <StepOrder />
+            <SubscribeForm />
+        </>
     )
 }
 
