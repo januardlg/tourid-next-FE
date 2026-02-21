@@ -1,13 +1,8 @@
 import { cn } from "@/lib/utils"
+import { IInputTid } from "./input"
 
-export interface IInputForm {
-    name: string,
-    value: string,
-    placeholder: string,
-    onChange: React.ChangeEventHandler<HTMLInputElement, HTMLInputElement>
-}
 
-const FormInput = ({ name, value, placeholder, onChange }: IInputForm) => {
+const FormInput = ({ name, value, placeholder, onChange }: IInputTid) => {
     return (
         <input className={cn(
             "w-full py-3 px-4 border border-tid-red-100 rounded-lg bg-white",

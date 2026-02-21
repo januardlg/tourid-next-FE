@@ -35,7 +35,7 @@ const SortCategory = () => {
                 <ListBoxTid value={sortingBy} onChange={setFilterBy} listOptions={sortingByOptions} isInputGroup={true} />
             </div>
 
-            <div className={cn('h-full py-2.5 px-3 w-fit border-t border-r  border-b border-tid-grey-200/20  rounded-tr-sm rounded-br-sm cursor-pointer '
+            <div className={cn('h-full py-2.5 px-3 w-fit border-t border-r  border-b border-tid-grey-200/20  rounded-tr-sm rounded-br-sm cursor-pointer bg-white '
             )}
                 onClick={handleChangeSortingValue}
             >
