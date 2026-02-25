@@ -1,18 +1,18 @@
 import { cn } from "@/lib/utils"
 
 export interface IButton {
-    type?: 'PRIMARY' | 'OUTLINE'
+    variant?: 'PRIMARY' | 'OUTLINE'
     children: React.ReactNode
     onClick: React.MouseEventHandler<HTMLButtonElement>
 }
 
-const Button = ({ type = 'PRIMARY', children, onClick }: IButton) => {
+const Button = ({ variant = 'PRIMARY', children, onClick }: IButton) => {
     return (
         <button onClick={onClick}
             className={cn(
-                'py-3 px-4 text-white rounded-sm w-full cursor-pointer',
-                { 'bg-tid-red-100': type === 'PRIMARY' },
-                { 'border border-tid-red-100 text-tid-red-100': type === 'OUTLINE' }
+                'py-3 px-4 text-white rounded-lg',
+                { 'bg-tid-red-100': variant === 'PRIMARY' },
+                { 'border border-tid-red-100 text-tid-red-100': variant === 'OUTLINE' }
             )}
         >
             {children}
