@@ -30,7 +30,7 @@ const ListBoxTid = ({ value, onChange, listOptions, isInputGroup = false, label,
                 {({ open }) => (
                     <>
                         <ListboxButton className={cn(
-                            'px-4 py-2.5 border border-tid-grey-200 text-left flex-align-items-center justify-between cursor-pointer w-full ',
+                            'px-4 py-2.5 border border-tid-grey-200/20 text-left flex-align-items-center justify-between cursor-pointer w-full bg-white',
                             'focus:outline-none',
                             isInputGroup && 'rounded-tl-sm rounded-bl-sm',
                             !isInputGroup && 'rounded-sm '
@@ -49,7 +49,7 @@ const ListBoxTid = ({ value, onChange, listOptions, isInputGroup = false, label,
                             {listOptions.map((listOption) => (
                                 <ListboxOption key={listOption.id} value={listOption} as={Fragment} disabled={listOption.disabled}>
                                     {({ focus, selected, disabled }) => (
-                                        <div className={cn('flex gap-2 px-4 py-2', focus && 'bg-orange-50', selected && 'bg-orange-100', disabled && 'bg-gray-100 text-tid-grey-200')}>
+                                        <div className={cn('flex gap-2 px-4 py-2', focus && 'bg-tid-red-100/10', selected && 'bg-tid-red-100/10', disabled && 'bg-gray-100 text-tid-grey-200')}>
                                             {listOption.name}
                                         </div>
                                     )}
