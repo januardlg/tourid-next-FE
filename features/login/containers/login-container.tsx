@@ -35,8 +35,8 @@ const LoginContainer = () => {
             </div>
 
             <div className="space-y-5 w-full mt-6">
-                <FormInput name="username" value={value.username} onChange={handleChangeInput} placehodler="Enter Username" />
-                <FormInput name="password" value={value.password} onChange={handleChangeInput} placehodler="Enter Password" />
+                <FormInput name="username" value={value.username} onChange={handleChangeInput} placeholder="Enter Username" />
+                <FormInput name="password" value={value.password} onChange={handleChangeInput} placeholder="Enter Password" />
 
 
                 <div className="flex justify-center">
