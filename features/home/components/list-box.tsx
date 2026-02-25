@@ -9,18 +9,19 @@ import CaretUpIcon from '@/components/icons/caret-up-icon';
 export interface IListOption {
     id: string | number;
     name: string | number;
-    disabled?: boolean
+    disabled?: boolean;
 }
 
 export interface IListBoxTid {
     value: IListOption;
-    onChange: React.Dispatch<React.SetStateAction<IListOption>>,
+    onChange: (value: IListOption) => void,
     listOptions: IListOption[],
     isInputGroup?: boolean,
-    label?: string
+    label?: string,
+    error?: string,
 }
 
-const ListBoxTid = ({ value, onChange, listOptions, isInputGroup = false, label }: IListBoxTid) => {
+const ListBoxTid = ({ value, onChange, listOptions, isInputGroup = false, label, error }: IListBoxTid) => {
 
     return (
         <Field>
@@ -59,6 +60,12 @@ const ListBoxTid = ({ value, onChange, listOptions, isInputGroup = false, label 
                 )}
 
             </Listbox>
+            <div className={cn(
+                'h-4 opacity-0 transition-all duration-100 ease-in-out',
+                error && 'flex opacity-100 '
+            )}>
+                <p className="text-sm text-red-400 ml-0.5">{error}</p>
+            </div>
         </Field>
     )
 }
