@@ -1,33 +1,16 @@
 'use client'
-import Button from "@/components/button/button"
-import FormInput from "@/components/input/form-input"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+
+import Button from "@/components/button/button"
+import FormInput from "@/components/input/form-input"
+
+import { Controller } from "react-hook-form"
+import { useRegister } from "../hooks/useRegister"
 
 const RegisterContainer = () => {
 
-
-    const [value, setValue] = useState({
-        username: '',
-        email: '',
-        password: '',
-        repassword: ''
-    })
-
-    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue((prevVal) => {
-            return {
-                ...prevVal,
-                [e.target.name]: e.target.value
-            }
-        })
-    }
-
-    const handleClick = () => {
-        console.log({ value })
-    }
-
+    const { control, handleSubmit, onSubmit, onError } = useRegister()
 
     return (
         <section className="w-full h-full flex flex-col justify-center items-center">
@@ -36,16 +19,66 @@ const RegisterContainer = () => {
                 <p className="text-tid-grey-100"> By creating an account, you agree to our <span className="text-tid-red-100"> Privacy policy </span> and <span className="text-tid-red-100">Terms </span>  of use.</p>
             </div>
 
-            <div className="space-y-5 w-full mt-6">
-                <FormInput name="username" value={value.username} onChange={handleChangeInput} placeholder="Enter Username" />
-                <FormInput name="email" value={value.email} onChange={handleChangeInput} placeholder="Enter Email" />
-                <FormInput name="password" value={value.password} onChange={handleChangeInput} placeholder="Enter Password" />
-                <FormInput name="repassword" value={value.repassword} onChange={handleChangeInput} placeholder="Re Enter Password" />
+            <div className="space-y-3 w-full mt-6">
+                <Controller
+                    name="username"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <FormInput
+                            name="Username"
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Enter Username"
+                            error={fieldState.error?.message}
+                        />
+                    )}
+                />
 
+                <Controller
+                    name="email"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <FormInput
+                            name="Email"
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Enter Email"
+                            error={fieldState.error?.message}
+                        />
+                    )}
+                />
 
-                <div className="flex justify-center">
+                <Controller
+                    name="password"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <FormInput
+                            name="Password"
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Enter Password"
+                            error={fieldState.error?.message}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="repassword"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <FormInput
+                            name="Password"
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Re Enter Password"
+                            error={fieldState.error?.message}
+                        />
+                    )}
+                />
+
+                <div className="flex justify-center mt-7">
                     <div className="w-fit flex flex-col">
-                        <Button type="PRIMARY" onClick={handleClick}>
+                        <Button variant="PRIMARY" onClick={handleSubmit(onSubmit, onError)}>
                             <p className="px-20">CREATE ACCOUNT</p>
                         </Button>
                         <div className="w-full mt-5 grid grid-cols-12 items-center">
@@ -63,13 +96,13 @@ const RegisterContainer = () => {
                 </div>
 
                 <div className="flex justify-center space-x-4">
-                    <Button type="OUTLINE" onClick={() => { }}>
+                    <Button variant="OUTLINE" onClick={() => { }}>
                         <Image src={`/icons/google-icon.png`} alt="google" width={16} height={16} />
                     </Button>
-                    <Button type="OUTLINE" onClick={() => { }}>
+                    <Button variant="OUTLINE" onClick={() => { }}>
                         <Image src={`/icons/facebook-icon.png`} alt="facebook" width={16} height={16} />
                     </Button>
-                    <Button type="OUTLINE" onClick={() => { }}>
+                    <Button variant="OUTLINE" onClick={() => { }}>
                         <Image src={`/icons/apple-icon.png`} alt="apple" width={16} height={16} />
                     </Button>
                 </div>
