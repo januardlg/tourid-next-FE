@@ -1,64 +1,32 @@
 'use client'
 
 import Button from "@/components/button/button"
-import ListBoxTid, { IListOption } from "@/features/home/components/list-box"
-import { useState } from "react"
-import { Controller, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
-import { AddOrderPackagePayload, addOrderPackagePayloadSchema } from "../lib/our-tour-detail-schema"
-import { zodResolver } from "@hookform/resolvers/zod"
+import ListBoxTid from "@/features/home/components/list-box"
 
+import { Controller } from "react-hook-form"
+
+import { useOurTourDetail } from "../hooks/useOurTourDetail"
 
 const ActionForm = () => {
 
+    const {
 
-    const NumberOfGuestOption: IListOption[] = [
-        { id: 'option', name: 'Select Number Of Guest', disabled: true },
-        { id: 1, name: 1 },
-        { id: 2, name: 2 }
-    ]
+        numberOfGuestListOption,
+        paymentMethodOptions,
 
-    const PaymentMethodOptions: IListOption[] = [
-        { id: 'option', name: 'Select Payment Method', disabled: true },
-        { id: 1, name: "BCA" },
-        { id: 2, name: "MANDIRI" }
-    ]
+        numberOfGuest,
+        handleNumberOfGuest,
 
-    const [numberOfGuest, setNumberOfGuest] = useState(NumberOfGuestOption[0])
-    const [paymentMethod, setPaymentMethod] = useState(PaymentMethodOptions[0])
+        paymentMethod,
+        handleSelectPaymentMethod,
 
+        control,
+        getValues,
+        handleSubmit,
+        onSubmit,
+        onError
 
-
-    const handleNumberOfGuest = (value: IListOption) => {
-        const totalPayment = Number(value.name) * 40000
-        setNumberOfGuest(value)
-        setValue('totalPayment', totalPayment.toString())
-    }
-
-    const handleSelectPaymentMethod = (value: IListOption) => {
-        setPaymentMethod(value)
-    }
-
-    const initialAddOrderPackagePayload: AddOrderPackagePayload = {
-        tourPackageId: 2,
-        paymentMethodId: 0,
-        numberOfGuests: 0,
-        totalPayment: '0'
-    }
-
-
-    const { control, handleSubmit, formState, setValue, getValues } = useForm<AddOrderPackagePayload>({
-        resolver: zodResolver(addOrderPackagePayloadSchema),
-        defaultValues: initialAddOrderPackagePayload
-    })
-
-    const onSubmit: SubmitHandler<AddOrderPackagePayload> = (data: AddOrderPackagePayload) => {
-        console.log("data", data)
-    }
-
-    const onError: SubmitErrorHandler<AddOrderPackagePayload> = (errors) => {
-        console.log("Form Submission Errors:", errors);
-    };
-
+    } = useOurTourDetail()
 
 
     return (
@@ -69,7 +37,7 @@ const ActionForm = () => {
                 name="numberOfGuests"
                 control={control}
                 render={({ field, fieldState }) => (
-                    <ListBoxTid label="No Of Guest" value={numberOfGuest} listOptions={NumberOfGuestOption}
+                    <ListBoxTid label="No Of Guest" value={numberOfGuest} listOptions={numberOfGuestListOption}
                         onChange={(value) => {
                             field.onChange(value.id)
                             handleNumberOfGuest(value)
@@ -83,7 +51,7 @@ const ActionForm = () => {
                 name="paymentMethodId"
                 control={control}
                 render={({ field, fieldState }) => (
-                    <ListBoxTid label="Payment Method" value={paymentMethod} listOptions={PaymentMethodOptions}
+                    <ListBoxTid label="Payment Method" value={paymentMethod} listOptions={paymentMethodOptions}
                         onChange={(value) => {
                             field.onChange(value.id)
                             handleSelectPaymentMethod(value)
@@ -93,7 +61,6 @@ const ActionForm = () => {
                 )}
             />
 
-            {/* <ListBoxTid label="Payment Method" value={paymentMethod} listOptions={PaymentMethodOptions} onChange={setPaymentMethod} /> */}
             <p className="text-tid-grey-200 text-center text-sm font-semibold">Subtotal</p>
             <p className="text-3xl text-tid-red-100 font-black text-center">Rp {getValues('totalPayment')} </p>
             <Button onClick={handleSubmit(onSubmit, onError)}>
