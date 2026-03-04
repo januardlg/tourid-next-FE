@@ -59,15 +59,21 @@ const LoginContainer = () => {
                 </div>
 
                 <div className="flex justify-center space-x-4">
-                    <Button type="OUTLINE" onClick={() => { }}>
-                        <Image src={`/icons/google-icon.png`} alt="google" width={16} height={16} />
-                    </Button>
-                    <Button type="OUTLINE" onClick={() => { }}>
-                        <Image src={`/icons/facebook-icon.png`} alt="facebook" width={16} height={16} />
-                    </Button>
-                    <Button type="OUTLINE" onClick={() => { }}>
-                        <Image src={`/icons/apple-icon.png`} alt="apple" width={16} height={16} />
-                    </Button>
+                    <div className="w-fit">
+                        <Button variant="OUTLINE" onClick={() => { }}>
+                            <Image src={`/icons/google-icon.png`} alt="google" width={16} height={16} />
+                        </Button>
+                    </div>
+                    <div className="w-fit">
+                        <Button variant="OUTLINE" onClick={() => { }}>
+                            <Image src={`/icons/facebook-icon.png`} alt="facebook" width={16} height={16} />
+                        </Button>
+                    </div>
+                    <div className="w-fit">
+                        <Button variant="OUTLINE" onClick={() => { }}>
+                            <Image src={`/icons/apple-icon.png`} alt="apple" width={16} height={16} />
+                        </Button>
+                    </div>
                 </div>
 
                 <p className="text-center text-tid-grey-100 text-sm">Don’t have account? <span><Link href={'/register'} className="text-tid-red-100"> Register Now</Link></span> </p>

@@ -33,7 +33,7 @@ const SortCategory = () => {
 
 
     return (
-        <div className='flex-align-items-center shadow-lg w-fit'>
+        <div className='flex w-fit'>
             <div className='min-w-50'>
                 <ListBoxTid value={sortingBy} onChange={setFilterBy} listOptions={sortingByOptions} isInputGroup={true} />
             </div>
