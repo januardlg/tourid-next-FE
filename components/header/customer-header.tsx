@@ -12,8 +12,8 @@ const CustomerHeader = () => {
             link: '/our-tour'
         },
         {
-            title: 'Craft Yours',
-            link: '/craft-yours'
+            title: 'Trip History',
+            link: '/trip-history'
         },
         {
             title: 'Blogs',

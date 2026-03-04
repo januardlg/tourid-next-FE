@@ -1,9 +1,6 @@
-import HomeContainer from "@/features/home/containers/home-container"
+import OurTourContainer from "@/features/our-tour/containers/our-tour-container";
 const Page = async () => {
+  return <OurTourContainer />;
+};
 
-    return (
-        <HomeContainer />
-    )
-}
-
-export default Page
+export default Page;
