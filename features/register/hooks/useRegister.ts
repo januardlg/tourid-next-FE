@@ -1,5 +1,5 @@
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
-import { FormRegisterValue, registerUserValidationSchema } from "../lib/user.valid-schema"
+import { FormRegisterValue, registerUserValidationSchema } from "../lib/register.valid-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 export const useRegister = () => {
