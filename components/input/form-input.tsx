@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { IInputTid } from "./input"
 
 export interface IInputForm {
     name: string,
