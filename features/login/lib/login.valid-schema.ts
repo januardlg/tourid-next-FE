@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/dtos/api-dto";
 import { emailAddressErrorMessage, passwordCharacterErrorMessage, passwordLengthErrorMessage, passwordRegex } from "@/features/register/lib/register.valid-schema"
 import { z } from "zod"
 
@@ -7,3 +8,11 @@ export const loginUserValidationSchema = z.object({
 })
 
 export type FormLoginValue = z.infer<typeof loginUserValidationSchema>
+
+
+export interface LoginResponseDTO {
+    accessToken: string;
+}
+
+
+export type LoginResponse = ApiResponse<LoginResponseDTO>
