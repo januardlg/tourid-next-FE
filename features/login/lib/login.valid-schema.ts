@@ -16,3 +16,10 @@ export interface LoginResponseDTO {
 
 
 export type LoginResponse = ApiResponse<LoginResponseDTO>
+
+export interface IUserData {
+    userId: number,
+    username: string,
+    email: string,
+    isAdmin: boolean
+}
