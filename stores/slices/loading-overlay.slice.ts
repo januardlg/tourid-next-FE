@@ -1,5 +1,5 @@
-import { create, StateCreator } from 'zustand'
-import { ModalSlice } from './modal-slice'
+import { StateCreator } from 'zustand'
+import { StoreStateType } from './store-state'
 
 export type LoadingOverlayState = {
     isOpenLoadingOverlay: boolean
@@ -14,7 +14,7 @@ export type LoadingOverlaySlice = LoadingOverlayState & LoadingOverlayAction
 
 
 export const createLoadingOverlaySlice: StateCreator<
-    ModalSlice & LoadingOverlaySlice,
+    StoreStateType,
     [],
     [],
     LoadingOverlaySlice

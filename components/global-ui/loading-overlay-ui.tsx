@@ -1,12 +1,12 @@
 'use client'
 
-import { useLoadingOverlayStore } from "@/providers/loading-overlay-provider"
+import { useAppStore } from "@/providers/app-store-provider"
 
 import { Dialog, DialogPanel } from "@headlessui/react"
 import LoadingCircle from "../loading/loading-circle"
 
 const LoadingOverlayUI = () => {
-    const { isOpenLoadingOverlay, setIsOpenLoadingOverlay } = useLoadingOverlayStore((state) => state)
+    const { isOpenLoadingOverlay, setIsOpenLoadingOverlay } = useAppStore((state) => state)
 
     return (
         <Dialog open={isOpenLoadingOverlay} onClose={setIsOpenLoadingOverlay} className="relative z-50">

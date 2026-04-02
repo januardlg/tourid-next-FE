@@ -20,7 +20,8 @@ export async function loginAction(loginData: FormLoginValue) {
             body: JSON.stringify(loginData),
         });
         if (!response.ok) {
-            throw await response.json()
+            const errorMessage = await response.json()
+            throw new Error(`${response.status}:${errorMessage.message}`)
         }
         const result: LoginResponse = await response.json();
 
@@ -30,15 +31,16 @@ export async function loginAction(loginData: FormLoginValue) {
 
         // Optionally revalidate any data caches in your Next.js app
         revalidatePath('/users');
-        return result;
 
-    } catch (error) {
-        return error
-    } finally {
         if (userData?.email && userData.isAdmin) {
             redirect('/dashboard')
         } else if (userData?.email && !userData.isAdmin) {
             redirect('/home')
         }
+
+        return result;
+    } catch (error) {
+        throw error
     }
+
 }

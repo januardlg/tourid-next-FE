@@ -1,26 +1,46 @@
-import { create, StateCreator } from 'zustand'
-import { LoadingOverlaySlice } from './loading-overlay.slice'
+import { StateCreator } from 'zustand'
+import { StoreStateType } from './store-state'
+
+export interface IModalContent {
+    title: string
+    notes: string;
+    okText?: string;
+    cancelText?: string;
+    okHanlde?: () => void;
+    cancelHandle?: () => void
+}
+
 
 export type ModalState = {
     isOpenModal: boolean
+    modalContent: IModalContent | undefined
 }
 
 export type ModalAction = {
     setIsOpenModal: (value: boolean) => void
+    setModalContent: (value: IModalContent) => void
+
 }
 
 
 export type ModalSlice = ModalState & ModalAction
 
-
 export const createModalSlice: StateCreator<
-    LoadingOverlaySlice & ModalSlice,
+    StoreStateType,
     [],
     [],
     ModalSlice
 > = (set) => ({
     isOpenModal: false,
-    setIsOpenModal: (value) => set((state) => ({ isOpenModal: value }))
+    modalContent: undefined,
+    setIsOpenModal: (value) => set((state) => ({ isOpenModal: value })),
+    setModalContent: (value) => set((state) => ({
+        modalContent: {
+            ...state.modalContent,
+            ...value
+        }
+    }))
+
 
 })
 
