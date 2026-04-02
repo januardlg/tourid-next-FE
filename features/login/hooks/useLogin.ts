@@ -2,6 +2,9 @@ import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
 import { FormLoginValue, loginUserValidationSchema } from "../lib/login.valid-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginAction } from "../actions/login-action"
+import { useAppStore } from "@/providers/app-store-provider"
+import { isRedirectError } from "next/dist/client/components/redirect-error"
+
 
 export const useLogin = () => {
 
@@ -9,7 +12,6 @@ export const useLogin = () => {
         email: '',
         password: '',
     }
-
 
     const {
         control,
@@ -21,13 +23,29 @@ export const useLogin = () => {
         defaultValues: initialValueFormLogin
     })
 
+    const { setIsOpenLoadingOverlay, setIsOpenModal, setModalContent } = useAppStore((store) => store)
 
     const onSubmit: SubmitHandler<FormLoginValue> = async (data: FormLoginValue) => {
-        console.log('isloading', isLoading)
-        console.log('isSubmitting', isSubmitting)
-        const response = await loginAction(data)
+        setIsOpenLoadingOverlay(true)
+        try {
+            const response = await loginAction(data)
+            console.log('response', response)
+        } catch (error) {
+            // console.log('error', error)
 
-        console.log({ response })
+            // ignore special error by next-redirect
+            if (!isRedirectError(error)) {
+                setIsOpenModal(true)
+                const message = (error as Error).message;
+                setModalContent({
+                    title: "Login Failed",
+                    notes: message,
+
+                })
+            }
+        } finally {
+            setIsOpenLoadingOverlay(false)
+        }
     }
 
     const onError: SubmitErrorHandler<FormLoginValue> = (errors) => {
