@@ -24,7 +24,7 @@ export const getUserDataFromJWT = async (accessToken: string) => {
         const secretKey = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET);
 
         const { payload } = await jwtVerify(accessToken as string, secretKey);
-        console.log({ payload })
+        // console.log({ payload })
 
         const userData: IUserData = {
             userId: payload?.userId as number,
@@ -37,11 +37,4 @@ export const getUserDataFromJWT = async (accessToken: string) => {
     } catch (error) {
         console.log('Failed Verify JWT', error)
     }
-}
-
-
-export async function logoutAction() {
-    const cookieStore = await cookies();
-
-    cookieStore.delete('accessToken');
 }

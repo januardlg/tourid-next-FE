@@ -15,7 +15,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
-    if (dataToken?.isAdmin == false && (authRoutes)) {
+    if (dataToken?.isAdmin == false && (pathname.startsWith('/dashboard') || authRoutes)) {
         return NextResponse.redirect(new URL('/home', request.url));
     }
 
