@@ -2,14 +2,11 @@
 
 import { type ReactNode, createContext, useContext, useRef } from 'react'
 import { useStore } from 'zustand'
-import { createLoadingOverlayStore } from '@/stores/loading-overlay-store'
 import { BoundedStoreApiType, createBoundedStore } from '@/stores/userBoundStore'
-import { LoadingOverlaySlice } from '@/stores/slices/loading-overlay.slice'
-import { ModalSlice } from '@/stores/slices/modal-slice'
+import { StoreStateType } from '@/stores/slices/store-state'
 
 
 // create context
-export type LoadingOverlayStoreApi = ReturnType<typeof createLoadingOverlayStore>
 export const AppStoreContext = createContext<BoundedStoreApiType | null>(
     null,
 )
@@ -42,7 +39,7 @@ export const AppStoreProvider = ({
 }
 
 
-export const useAppStore = <T,>(selector: (store: LoadingOverlaySlice & ModalSlice) => T): T => {
+export const useAppStore = <T,>(selector: (store: StoreStateType) => T): T => {
     const storeContext = useContext(AppStoreContext);
     if (!storeContext) throw new Error('useAppStore must be used within StoreProvider');
     return useStore(storeContext, selector);

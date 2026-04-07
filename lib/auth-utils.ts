@@ -38,3 +38,10 @@ export const getUserDataFromJWT = async (accessToken: string) => {
         console.log('Failed Verify JWT', error)
     }
 }
+
+
+export async function logoutAction() {
+    const cookieStore = await cookies();
+
+    cookieStore.delete('accessToken');
+}
