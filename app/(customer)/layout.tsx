@@ -1,5 +1,6 @@
 import Footer from "@/components/footer/footer";
 import CustomerHeader from "@/components/header/customer-header";
+import ReactQueryProvider from "@/features/our-tour/components/react-query-provider";
 import { getUserDataFromJWT } from "@/lib/auth-utils";
 import { cookies } from 'next/headers'
 
@@ -18,7 +19,10 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         <section className="col-span-12">
           <CustomerHeader dataUser={dataToken} />
         </section>
-        <section className="col-span-12">{children}</section>
+        <ReactQueryProvider>
+
+          <section className="col-span-12">{children}</section>
+        </ReactQueryProvider>
         <Footer />
         <section className="col-span-1" />
       </section>

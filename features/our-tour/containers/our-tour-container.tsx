@@ -1,9 +1,22 @@
-import ProductCard from "@/components/card/product-card";
 import SearchCategory from "../components/search-category";
 import SortCategory from "../components/sort-category";
 import Pagination from "../components/pagination";
+import PackageTourList from "../components/package-tour-list";
 
-const OurTourContainer = () => {
+
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { makeQueryClient } from "@/lib/query";
+import { getPackageTourList } from "../services/tour-list";
+
+const OurTourContainer = async () => {
+
+  const queryClient = makeQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['package-tour-list'],
+    queryFn: getPackageTourList,
+  });
+
   return (
     <section className="mt-12">
       <div className="grid grid-cols-12 gap-9 ">
@@ -19,29 +32,10 @@ const OurTourContainer = () => {
         </div>
       </div>
       <div className="grid grid-cols-12">
-        <div className=" col-span-12 grid grid-cols-12 gap-6 mt-10">
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-        </div>
-
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <PackageTourList />
+        </HydrationBoundary>
       </div>
-      <Pagination />
     </section>
   );
 };
