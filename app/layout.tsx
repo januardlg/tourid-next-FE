@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { cookies } from 'next/headers'
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,18 +22,27 @@ export const metadata: Metadata = {
 import { AppStoreProvider } from "@/providers/app-store-provider";
 import LoadingOverlayUI from "@/components/global-ui/loading-overlay-ui";
 import ModalUI from "@/components/global-ui/modal-ui";
+import { getUserDataFromJWT } from "@/lib/auth-utils";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const cookieStore = await cookies()
+  const token = cookieStore.get('accessToken')?.value;
+
+  const dataToken = await getUserDataFromJWT(token as string)
+
+  console.log('dataTokenx1', dataToken)
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppStoreProvider initialData={{ name: '' }}>
+        <AppStoreProvider initialData={{ username: dataToken?.username }}>
           {children}
           <LoadingOverlayUI />
           <ModalUI />
