@@ -1,6 +1,5 @@
 import SearchCategory from "../components/search-category";
 import SortCategory from "../components/sort-category";
-import Pagination from "../components/pagination";
 import PackageTourList from "../components/package-tour-list";
 
 
@@ -10,10 +9,11 @@ import { getPackageTourList } from "../services/tour-list";
 
 const OurTourContainer = async () => {
 
+  // fetches data and populates the cache before a user needs it 
   const queryClient = makeQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['package-tour-list'],
+    queryKey: ['package-tour-list'], //cache name
     queryFn: getPackageTourList,
   });
 

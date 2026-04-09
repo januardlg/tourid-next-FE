@@ -1,42 +1,25 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query';
-import { getPackageTourList } from '../services/tour-list';
 import Pagination from './pagination';
-
+import ProductCard from '@/features/our-tour/components/product-card';
+import { usePackageTourList } from '../hooks/usePackageTourList';
 const PackageTourList = () => {
 
-    const { data, isLoading } = useQuery({
-        queryKey: ['package-tour-list'],
-        queryFn: getPackageTourList,
-    });
-
-    console.log({ data })
-
+    const { packageTourListData } = usePackageTourList()
 
     return (
         <>
             <div className=" col-span-12 grid grid-cols-12 gap-6 mt-10">
-                {/* <div className="col-span-4">
-                <ProductCard />
+
+                {packageTourListData?.data?.map((packageTour) => (
+                    <div key={packageTour.packageId + ':' + packageTour.namePackage} className="col-span-4">
+                        <ProductCard data={packageTour} />
+                    </div>
+                ))}
+
+
             </div>
-            <div className="col-span-4">
-                <ProductCard />
-            </div>
-            <div className="col-span-4">
-                <ProductCard />
-            </div>
-            <div className="col-span-4">
-                <ProductCard />
-            </div>
-            <div className="col-span-4">
-                <ProductCard />
-            </div>
-            <div className="col-span-4">
-                <ProductCard />
-            </div> */}
-            </div>
-            <div>
+            <div className='col-span-12'>
                 <Pagination />
             </div>
         </>

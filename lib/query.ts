@@ -6,7 +6,7 @@ export function makeQueryClient() {
     return new QueryClient({
         defaultOptions: {
             queries: {
-                staleTime: 1000 * 60, // avoid refetch immediately
+                staleTime: 1000 * 60, //time where data is considered fresh, prevents automatic refetching 
             },
         },
     });
