@@ -6,6 +6,7 @@ import PackageTourList from "../components/package-tour-list";
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { makeQueryClient } from "@/lib/query";
 import { getPackageTourList } from "../services/tour-list";
+import { intialParamsPackageTour } from "../lib/shared-data";
 
 const OurTourContainer = async () => {
 
@@ -14,7 +15,7 @@ const OurTourContainer = async () => {
 
   await queryClient.prefetchQuery({
     queryKey: ['package-tour-list'], //cache name
-    queryFn: getPackageTourList,
+    queryFn:() => getPackageTourList({limit:'20'}),
   });
 
   return (

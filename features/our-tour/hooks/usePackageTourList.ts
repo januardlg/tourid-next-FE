@@ -1,8 +1,10 @@
+'use client'
 import { useQuery } from '@tanstack/react-query';
 import { getPackageTourList } from '../services/tour-list';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { PackageTourQueryDTO } from '../lib/package-tour.dto';
+import { intialParamsPackageTour } from '../lib/shared-data';
 
 
 export const usePackageTourList = () => {
@@ -10,9 +12,12 @@ export const usePackageTourList = () => {
     const queryParams: PackageTourQueryDTO = {
         limit: '5'
     }
+
+    
+
     const { data: packageTourListData, isLoading } = useQuery({
-        queryKey: ['package-tour-list'],
-        queryFn: getPackageTourList, //trigger when no cached detec
+        queryKey: ['package-tour-list', intialParamsPackageTour],
+        queryFn:() => getPackageTourList(intialParamsPackageTour), //trigger when no cached detec
     });
 
     // const [totalPages, setTotalPages] = useState(packageTourListData?.meta?.totalPages as number)
@@ -45,9 +50,6 @@ export const usePackageTourList = () => {
     }
 
 
-    const getDurationDate = (endDate: Date, startDate: Date) => {
-        return (dayjs(endDate).diff(dayjs(startDate), 'day'))
-    }
 
     return {
         packageTourListData,
@@ -58,6 +60,5 @@ export const usePackageTourList = () => {
 
         handleNextPage,
         handlePrevPage,
-        getDurationDate
     }
 }
