@@ -1,13 +1,11 @@
-import {
-    QueryClient,
-} from '@tanstack/react-query'
+import { QueryClient } from "@tanstack/react-query";
 
 export function makeQueryClient() {
-    return new QueryClient({
-        defaultOptions: {
-            queries: {
-                staleTime: 1000 * 60, //time where data is considered fresh, prevents automatic refetching 
-            },
-        },
-    });
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60_000, //time where data is considered fresh, prevents automatic refetching
+      },
+    },
+  });
 }

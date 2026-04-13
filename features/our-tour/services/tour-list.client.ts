@@ -5,7 +5,10 @@ import {
   PackageTourQueryDTO,
 } from "../lib/package-tour.dto";
 
-export async function getPackageTourList(params?: PackageTourQueryDTO) {
+// client requests go through BFF (Route Handler) to protect data
+// use BFF (Route Handler) => protect tokens / secrets, avoid CORS, centralize logic
+
+export async function getPackageTourListClient(params?: PackageTourQueryDTO) {
   const queryParams = new URLSearchParams({
     ...params,
   });
@@ -14,8 +17,12 @@ export async function getPackageTourList(params?: PackageTourQueryDTO) {
     method: "GET",
   });
 
+  console.log("HIT API CLIENT");
+
   const result: ApiResponse<PackageTourProductDTO[], MetaDataPackageTourDTO> =
     await response.json();
+
+  console.log("HIT API CLIENT", result);
 
   return result;
 }

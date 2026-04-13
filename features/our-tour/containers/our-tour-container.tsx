@@ -2,20 +2,19 @@ import SearchCategory from "../components/search-category";
 import SortCategory from "../components/sort-category";
 import PackageTourList from "../components/package-tour-list";
 
-
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { makeQueryClient } from "@/lib/query";
-import { getPackageTourList } from "../services/tour-list";
 import { intialParamsPackageTour } from "../lib/shared-data";
+import { QUERY_KEYS_OUR_TOUR } from "../constant/query-key";
+import { getPackageTourListServer } from "../services/tour-list.server";
 
 const OurTourContainer = async () => {
-
-  // fetches data and populates the cache before a user needs it 
+  // fetches data and populates the cache before a user needs it
   const queryClient = makeQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['package-tour-list'], //cache name
-    queryFn:() => getPackageTourList({limit:'20'}),
+    queryKey:  ['package-tour-list', intialParamsPackageTour.page], //cache name
+    queryFn: () => getPackageTourListServer(intialParamsPackageTour),
   });
 
   return (
