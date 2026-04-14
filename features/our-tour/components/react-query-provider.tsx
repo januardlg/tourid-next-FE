@@ -9,9 +9,9 @@ export default function ReactQueryProvider({
 }: {
     children: React.ReactNode;
 }) {
-    // const [queryClient] = useState(() => new QueryClient());
+    const [queryClient] = useState(() => new QueryClient());
 
-     const queryClient = makeQueryClient();
+    //  const queryClient = makeQueryClient();
 
     return (
         <QueryClientProvider client={queryClient}>

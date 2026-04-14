@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { getPackageTourListClient } from "../services/tour-list.client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { PackageTourQueryDTO } from "../lib/package-tour.dto";
 import { intialParamsPackageTour } from "../lib/shared-data";
@@ -12,19 +12,18 @@ export const usePackageTourList = () => {
     intialParamsPackageTour,
   );
 
-  const { data: packageTourListData, isLoading } = useQuery({
-    queryKey: ['package-tour-list', queryParamsState.page],
-    // queryFn: () => getPackageTourListClient(queryParamsState), //trigger when no cached detect
-    // staleTime: 60_000,
+  const query = useQuery({
+    queryKey: ["package-tour-list", queryParamsState.page, queryParamsState.limit],
     queryFn: ({ queryKey }) => {
-      const [, page] = queryKey;
-      return getPackageTourListClient({ page });
+      const [, page, limit] = queryKey;
+      return getPackageTourListClient({ page, limit });
     },
+    staleTime: 60_000,
   });
 
   // const [totalPages, setTotalPages] = useState(packageTourListData?.meta?.totalPages as number)
 
-  const totalPages = packageTourListData?.meta?.totalPages as number;
+  const totalPages = query.data?.meta?.totalPages as number;
   // const LIMIT: number = 5
   const [activePage, setActivePage] = useState(1);
 
@@ -68,9 +67,12 @@ export const usePackageTourList = () => {
     });
   };
 
+  useEffect(() => {
+    console.log("packageTourListData in hook", query.data);
+  }, [query.data]);
+
   return {
-    packageTourListData,
-    isLoading,
+    packageTourListData : query.data,
     activePage,
     arrTotalPages,
 

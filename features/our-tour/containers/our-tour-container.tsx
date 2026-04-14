@@ -13,7 +13,7 @@ const OurTourContainer = async () => {
   const queryClient = makeQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey:  ['package-tour-list', intialParamsPackageTour.page], //cache name
+    queryKey:  ['package-tour-list', intialParamsPackageTour.page, intialParamsPackageTour.limit], //cache name
     queryFn: () => getPackageTourListServer(intialParamsPackageTour),
   });
 
