@@ -20,7 +20,6 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           <CustomerHeader dataUser={dataToken} />
         </section>
         <ReactQueryProvider>
-
           <section className="col-span-12">{children}</section>
         </ReactQueryProvider>
         <Footer />

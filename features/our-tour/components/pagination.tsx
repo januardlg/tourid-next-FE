@@ -2,12 +2,19 @@
 import ArrowNextIcon from "@/components/icons/arrow-next-icon"
 import { cn } from "@/lib/utils"
 import { usePackageTourList } from "../hooks/usePackageTourList"
+import { useQuery } from "@tanstack/react-query"
+import { getPackageTourListClient } from "../services/tour-list.client"
 
-const Pagination = () => {
+interface IPagination {
+    handleNextPage: () => void
+    handlePrevPage: () => void
+    arrTotalPages: number[]
+    activePage: number
+    totalPages: number
 
-    const { handleNextPage, handlePrevPage, arrTotalPages, activePage, totalPages, packageTourListData } = usePackageTourList()
+}
 
-    console.log('arrTotalPages', arrTotalPages, totalPages, packageTourListData?.meta?.page)
+const Pagination = ({ handleNextPage, handlePrevPage, arrTotalPages, activePage, totalPages }: IPagination) => {
 
     return (
         <section className="mt-15 w-full flex justify-center items-center">
@@ -17,7 +24,7 @@ const Pagination = () => {
                 } onClick={handlePrevPage}>
                     <ArrowNextIcon />
                 </button>
-                {arrTotalPages.slice(activePage - 1, activePage + 1).map((val: number) => (
+                {arrTotalPages?.slice(activePage - 1, activePage + 1).map((val: number) => (
                     <div key={val} className={cn("text-lg font-medium text-tid-grey-200", activePage === val && 'font-bold text-black')}>{val}</div>
                 ))}
                 <button className={
@@ -25,8 +32,6 @@ const Pagination = () => {
                 } onClick={handleNextPage}>
                     <ArrowNextIcon />
                 </button>
-
-
             </div>
         </section>
     )

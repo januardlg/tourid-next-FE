@@ -1,84 +1,89 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getPackageTourListClient } from "../services/tour-list.client";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import { useState, useEffect } from "react";
 import { PackageTourQueryDTO } from "../lib/package-tour.dto";
 import { intialParamsPackageTour } from "../lib/shared-data";
 import { QUERY_KEYS_OUR_TOUR } from "../constant/query-key";
+import { useAppStore } from "@/providers/app-store-provider";
 
 export const usePackageTourList = () => {
-  const [queryParamsState, setQueryParamsState] = useState<PackageTourQueryDTO>(
-    intialParamsPackageTour,
-  );
 
-  const query = useQuery({
-    queryKey: ["package-tour-list", queryParamsState.page, queryParamsState.limit],
-    queryFn: ({ queryKey }) => {
-      const [, page, limit] = queryKey;
-      return getPackageTourListClient({ page, limit });
-    },
-    staleTime: 60_000,
-  });
+    const { setIsOpenLoadingOverlay } = useAppStore((store) => store);
+    const [queryParamsState, setQueryParamsState] = useState<PackageTourQueryDTO>(
+        intialParamsPackageTour,
+    );
 
-  // const [totalPages, setTotalPages] = useState(packageTourListData?.meta?.totalPages as number)
 
-  const totalPages = query.data?.meta?.totalPages as number;
-  // const LIMIT: number = 5
-  const [activePage, setActivePage] = useState(1);
-
-  const arrTotalPages = Array.from(
-    { length: totalPages },
-    (_, index) => index + 1,
-  );
-
-  const handleNextPage = () => {
-    let numberPage = activePage;
-
-    if (activePage < totalPages) {
-      numberPage += 1;
-    }
-
-    setActivePage(numberPage);
-
-    setQueryParamsState((prev: PackageTourQueryDTO) => {
-      return {
-        ...prev,
-        page: numberPage.toString(),
-      };
+    const queryResultFetch = useQuery({
+        queryKey: [
+            QUERY_KEYS_OUR_TOUR.packageTourList([queryParamsState.page,
+            queryParamsState.limit,]),
+        ],
+        queryFn: () => {
+            return getPackageTourListClient(queryParamsState);
+        },
+        staleTime: 60_000,
+        placeholderData: keepPreviousData
     });
-  };
 
-  const handlePrevPage = () => {
-    let numberPage = activePage;
 
-    if (activePage > 1) {
-      numberPage = numberPage - 1;
-    } else {
-      numberPage = 1;
-    }
-    setActivePage(numberPage);
+    // Set loading overlay based on query pending state
+    useEffect(() => {
+        setIsOpenLoadingOverlay(queryResultFetch.isFetching);
+    }, [queryResultFetch.isFetching, setIsOpenLoadingOverlay]);
 
-    setQueryParamsState((prev) => {
-      return {
-        ...prev,
-        page: numberPage.toString(),
-      };
-    });
-  };
 
-  useEffect(() => {
-    console.log("packageTourListData in hook", query.data);
-  }, [query.data]);
+    const [totalPages, setTotalPages] = useState(queryResultFetch?.data?.meta?.totalPages as number ?? 1)
 
-  return {
-    packageTourListData : query.data,
-    activePage,
-    arrTotalPages,
+    const arrTotalPages = Array.from(
+        { length: totalPages },
+        (_, index) => index + 1,
+    );
 
-    totalPages,
+    const handleNextPage = () => {
+        let numberPage = parseInt(queryParamsState.page || '1');
 
-    handleNextPage,
-    handlePrevPage,
-  };
+        if (numberPage < totalPages) {
+            numberPage += 1;
+        }
+
+        setQueryParamsState((prev: PackageTourQueryDTO) => {
+            return {
+                ...prev,
+                page: numberPage.toString(),
+            };
+        });
+    };
+
+    const handlePrevPage = () => {
+        let numberPage = parseInt(queryParamsState.page || '1');
+
+        if (numberPage > 1) {
+            numberPage = numberPage - 1;
+        } else {
+            numberPage = 1;
+        }
+
+        setQueryParamsState((prev) => {
+            return {
+                ...prev,
+                page: numberPage.toString(),
+            };
+        });
+    };
+
+
+
+
+    return {
+        arrTotalPages,
+        queryParamsState,
+
+        totalPages,
+        queryResultFetch,
+
+        handleNextPage,
+        handlePrevPage,
+    };
 };
