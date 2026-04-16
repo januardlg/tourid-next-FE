@@ -2,7 +2,7 @@
 export interface PackageTourQueryDTO {
     page: string;
     limit: string;
-    sortBy?: string;
+    sortBy: string;
     order?: "asc" | "desc";
     filterBy?: string;
     filterValue?: string;

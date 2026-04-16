@@ -1,6 +1,6 @@
 import Footer from "@/components/footer/footer";
 import CustomerHeader from "@/components/header/customer-header";
-import ReactQueryProvider from "@/features/our-tour/components/react-query-provider";
+import ReactQueryProvider from "@/app/(customer)/react-query-provider";
 import { getUserDataFromJWT } from "@/lib/auth-utils";
 import { cookies } from 'next/headers'
 

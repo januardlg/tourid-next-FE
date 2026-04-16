@@ -17,12 +17,10 @@ export async function getPackageTourListClient(params?: PackageTourQueryDTO) {
     method: "GET",
   });
 
-  console.log("HIT API CLIENT");
+  console.log("HIT API CLIENT", queryParams.toString());
 
   const result: ApiResponse<PackageTourProductDTO[], MetaDataPackageTourDTO> =
     await response.json();
-
-  console.log("HIT API CLIENT", result);
 
   return result;
 }

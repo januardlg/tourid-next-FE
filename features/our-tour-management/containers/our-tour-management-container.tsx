@@ -2,7 +2,7 @@ import AdminHeader from "@/components/header/admin-header"
 import SearchCategory from "../components/search-category"
 import SortCategory from "../components/sort-category"
 import ButtonAddTour from "../components/button-add"
-import Pagination from "@/features/our-tour/components/pagination"
+import Pagination from "@/components/pagination/pagination"
 
 const OurTourManagementContainer = () => {
     return (

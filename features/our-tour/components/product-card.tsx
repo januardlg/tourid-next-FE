@@ -5,8 +5,6 @@ import { getDurationDate, getRupiahCurrencyFormat } from "@/lib/utils"
 
 const ProductCard = ({ data }: { data: PackageTourProductDTO }): React.ReactElement => {
     
-
-
     return (
         <div className="px-6 py-5 rounded-3xl w-full shadow-2xl">
             <div>

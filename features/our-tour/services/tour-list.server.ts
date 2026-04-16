@@ -17,7 +17,7 @@ export async function getPackageTourListServer(params?: PackageTourQueryDTO) {
     method: "GET",
   });
 
-  console.log('HIT API SERVER')
+  console.log('HIT API SERVER', queryParams.toString())
 
   const result: ApiResponse<PackageTourProductDTO[], MetaDataPackageTourDTO> =
     await response.json();

@@ -1,16 +1,13 @@
 
 import ArrowNextIcon from "@/components/icons/arrow-next-icon"
 import { cn } from "@/lib/utils"
-import { usePackageTourList } from "../hooks/usePackageTourList"
-import { useQuery } from "@tanstack/react-query"
-import { getPackageTourListClient } from "../services/tour-list.client"
 
 interface IPagination {
-    handleNextPage: () => void
-    handlePrevPage: () => void
     arrTotalPages: number[]
     activePage: number
     totalPages: number
+    handleNextPage: () => void
+    handlePrevPage: () => void
 
 }
 
