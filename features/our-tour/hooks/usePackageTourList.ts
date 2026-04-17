@@ -4,7 +4,7 @@ import { getPackageTourListClient } from "../services/tour-list.client";
 import { useState, useEffect } from "react";
 import { PackageTourQueryDTO } from "../lib/package-tour.dto";
 import { initialParamsPackageTour } from "../lib/shared-data";
-import { QUERY_KEYS_OUR_TOUR } from "../../../lib/constants/query-key";
+import { QUERY_KEYS_CONSTANTS } from "../../../lib/constants/query-key";
 import { useAppStore } from "@/providers/app-store-provider";
 import { IListOption } from "@/features/home/components/list-box";
 import { SortingType } from "@/components/input/select/select-with-sorting";
@@ -20,7 +20,7 @@ export const usePackageTourList = () => {
   // QUERY
   const queryResultFetch = useQuery({
     queryKey: [
-      QUERY_KEYS_OUR_TOUR.packageTourList([
+      QUERY_KEYS_CONSTANTS.ourTour.packageTourList([
         queryParamsState.page,
         queryParamsState.limit,
         queryParamsState.filterBy,
@@ -43,7 +43,7 @@ export const usePackageTourList = () => {
     { length: totalPages },
     (_, index) => index + 1,
   );
-
+  console.log('arrTotalPages', arrTotalPages);
   //   searching
   const filterSearchOptions: IListOption[] = [
     { id: "", name: "Select Category", disabled: true },

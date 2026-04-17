@@ -28,8 +28,10 @@ export interface PackageTourProductDTO {
     activities: IActivity[],
     hostelryPartnerId: number,
     quota: number,
+    quotaRemaining?:number;
     hostelryPartnerName?: string;
     hostelryPartnerLocation?: string;
+    hostelryAddress?: string;
     createdAt: Date,
     updatedAt: Date,
 }

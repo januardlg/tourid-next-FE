@@ -21,7 +21,7 @@ const ProductCard = ({ data }: { data: PackageTourProductDTO }): React.ReactElem
                     <p className="text-xs text-tid-grey-100">Start From</p>
                     <p className="text-md text-tid-red-100 font-semibold">{getRupiahCurrencyFormat(data.cost)} / person</p>
                 </div>
-                <ButtonLink href="/our-tour/1">Detail</ButtonLink>
+                <ButtonLink href={`/our-tour/${data.packageId}`}>Detail</ButtonLink>
             </div>
         </div>
     )

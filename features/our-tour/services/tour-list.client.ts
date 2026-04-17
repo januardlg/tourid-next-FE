@@ -13,7 +13,7 @@ export async function getPackageTourListClient(params?: PackageTourQueryDTO) {
     ...params,
   });
 
-  const response = await fetch("/api/package-tour?" + queryParams.toString(), {
+  const response = await fetch("/api/package-tour/list?" + queryParams.toString(), {
     method: "GET",
   });
 

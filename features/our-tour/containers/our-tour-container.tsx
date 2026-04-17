@@ -3,7 +3,7 @@ import PackageTourList from "../components/package-tour-list";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { makeQueryClient } from "@/lib/query";
 import { initialParamsPackageTour } from "../lib/shared-data";
-import { QUERY_KEYS_OUR_TOUR } from "../../../lib/constants/query-key";
+import { QUERY_KEYS_CONSTANTS } from "../../../lib/constants/query-key";
 import { getPackageTourListServer } from "../services/tour-list.server";
 
 const OurTourContainer = async () => {
@@ -12,7 +12,7 @@ const OurTourContainer = async () => {
 
   await queryClient.prefetchQuery({
     queryKey: [
-      QUERY_KEYS_OUR_TOUR.packageTourList([
+      QUERY_KEYS_CONSTANTS.ourTour.packageTourList([
         initialParamsPackageTour.page,
         initialParamsPackageTour.limit,
         initialParamsPackageTour.filterBy,
