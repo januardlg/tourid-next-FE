@@ -1,28 +1,20 @@
-const ActivityList = () => {
+import { PackageTourProductDTO } from "@/features/our-tour/lib/package-tour.dto";
 
+type ActivityListProps = Pick<PackageTourProductDTO, "activities">;
 
-    const ACITIVITIES = [
-        {
-            day: "1",
-            title: ["Traditional Market", "Zoo", "Taman Merdeka"]
-        },
-        {
-            day: "2",
-            title: ["Diving"]
-        }
-    ]
+const ActivityList = ({ activities }: ActivityListProps) => {
 
     return (
         <section>
             <p className="text-title-detail-tour">Activity<span className="ml-2 text-sub-title-detail-tour ">What you will do</span></p>
             <div className="space-y-2 mt-3">
-                {ACITIVITIES.map((activity) => (
+                {activities.map((activity) => (
                     <div key={activity.day} className="flex space-x-2 text-tid-grey-100">
                         <p className="font-semibold">Day {activity.day}</p>
                         <p>:</p>
                         <div className="flex-align-items-center">
-                            {activity?.title?.map((act, index: number) => (
-                                <p key={act}>{act}{index !== activity?.title.length - 1 && <span className="mr-1">,</span>} </p>
+                            {activity?.titleList?.map((act, index: number) => (
+                                <p key={act.id}>{act.title}{index !== activity?.titleList.length - 1 && <span className="mr-1">,</span>} </p>
                             ))}
                         </div>
                     </div>

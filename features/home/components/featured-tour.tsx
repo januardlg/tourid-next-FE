@@ -1,4 +1,4 @@
-import ProductCard from "@/components/card/product-card"
+import ProductCard from "@/features/our-tour/components/product-card"
 
 const FeaturedTour = () => {
     return (

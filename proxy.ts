@@ -1,9 +1,16 @@
 // middleware.ts
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getUserDataFromJWT } from './lib/auth-utils';
 
 export async function proxy(request: NextRequest) {
+
+    const res = NextResponse.next()
+
+    res.headers.append('Access-Control-Allow-Origin', 'http://localhost:3000/')
+    res.headers.append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    res.headers.append('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
     const token = request.cookies.get('accessToken')?.value;
     const { pathname } = request.nextUrl;
 
@@ -23,5 +30,5 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    return NextResponse.next();
+    return res
 }

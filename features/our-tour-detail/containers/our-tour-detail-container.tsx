@@ -1,33 +1,34 @@
-import Image from "next/image"
-import ActionForm from "../components/action-form"
-import TermConditionTour from "../components/term-condition-tour"
-import DescriptionTour from "../components/description-tour"
-import Divider from "@/features/home/components/divider"
-import ActivityList from "../components/activity-list"
-import AccomodationTour from "../components/accomodation-tour"
+import OurTourDetail from "../components/our-tour-detail";
+import { makeQueryClient } from "@/lib/query";
+import { getPackageTourDetailServer, getPaymentMethodListServer } from "../services/tour-detail.server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
 
-const OurTourDetailContainer = () => {
-    return (
-        <section className="mt-12">
-            <p className="text-2xl font-bold">Siantar Tour : City Tour and History</p>
-            <section className="grid grid-cols-12 gap-6 mt-4">
-                <div className="h-full col-span-8">
-                    <Image src={'/images/step-content.png'} alt="image" width={2000} height={2000} className="w-full h-full" />
-                </div>
-                <div className="col-span-4">
-                    <ActionForm />
-                </div>
-            </section>
-            <section className="space-y-6">
-                <TermConditionTour />
-                <DescriptionTour />
-                <Divider />
-                <ActivityList />
-                <Divider />
-                <AccomodationTour />
-            </section>
-        </section>
-    )
+export interface OurTourDetailContainerProps {
+  tourId: string;
 }
 
-export default OurTourDetailContainer
+const OurTourDetailContainer = async ({
+  tourId,
+}: OurTourDetailContainerProps) => {
+  const queryClient = makeQueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(tourId),
+      queryFn: () => getPackageTourDetailServer(tourId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS_CONSTANTS.common.paymentMethodList(),
+      queryFn: () => getPaymentMethodListServer(),
+    }),
+  ]);
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <OurTourDetail tourId={tourId} />
+    </HydrationBoundary>
+  );
+};
+
+export default OurTourDetailContainer;

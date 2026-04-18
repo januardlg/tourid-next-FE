@@ -1,48 +1,33 @@
-import ProductCard from "@/components/card/product-card";
-import SearchCategory from "../components/search-category";
-import SortCategory from "../components/sort-category";
-import Pagination from "../components/pagination";
+import PackageTourList from "../components/package-tour-list";
 
-const OurTourContainer = () => {
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { makeQueryClient } from "@/lib/query";
+import { initialParamsPackageTour } from "../lib/shared-data";
+import { QUERY_KEYS_CONSTANTS } from "../../../lib/constants/query-key";
+import { getPackageTourListServer } from "../services/tour-list.server";
+
+const OurTourContainer = async () => {
+  // fetches data and populates the cache before a user needs it
+  const queryClient = makeQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: [
+      QUERY_KEYS_CONSTANTS.ourTour.packageTourList([
+        initialParamsPackageTour.page,
+        initialParamsPackageTour.limit,
+        initialParamsPackageTour.filterBy,
+        initialParamsPackageTour.filterValue,
+        initialParamsPackageTour.sortBy,
+        initialParamsPackageTour.order
+      ]),
+    ], //cache name
+    queryFn: () => getPackageTourListServer(initialParamsPackageTour),
+  });
+
   return (
-    <section className="mt-12">
-      <div className="grid grid-cols-12 gap-9 ">
-        <div className="col-span-4">
-          <p className="text-2xl font-bold">Explore Our Tour</p>
-          <p>23 Activities Found</p>
-        </div>
-        <div className="col-span-4">
-          <SearchCategory />
-        </div>
-        <div className="col-span-4">
-          <SortCategory />
-        </div>
-      </div>
-      <div className="grid grid-cols-12">
-        <div className=" col-span-12 grid grid-cols-12 gap-6 mt-10">
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-          <div className="col-span-4">
-            <ProductCard />
-          </div>
-        </div>
-
-      </div>
-      <Pagination />
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PackageTourList />
+    </HydrationBoundary>
   );
 };
 

@@ -1,4 +1,4 @@
-import Pagination from "@/features/our-tour/components/pagination"
+import Pagination from "@/components/pagination/pagination"
 import FilterStatus from "../components/filter-status"
 import HistoryCard from "../components/history-card"
 import SortCategory from "../components/sort-category"
@@ -29,7 +29,11 @@ const TripHistoryContainer = () => {
             </div>
 
             <div className="mt-20">
-                <Pagination />
+                <Pagination arrTotalPages={[]} activePage={0} totalPages={0} handleNextPage={function (): void {
+                    throw new Error("Function not implemented.")
+                } } handlePrevPage={function (): void {
+                    throw new Error("Function not implemented.")
+                } } />
             </div>
         </section>
     )
