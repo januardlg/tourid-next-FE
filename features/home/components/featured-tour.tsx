@@ -6,13 +6,13 @@ const FeaturedTour = () => {
             <p className="text-center text-5xl font-semibold">Our Top Selling Tour</p>
             <div className="mt-15 grid grid-cols-12 gap-10">
                 <div className="col-span-4">
-                    <ProductCard />
+                    {/* <ProductCard /> */}
                 </div>
                 <div className="col-span-4">
-                    <ProductCard />
+                    {/* <ProductCard /> */}
                 </div>
                 <div className="col-span-4">
-                    <ProductCard />
+                    {/* <ProductCard /> */}
                 </div>
             </div>
         </section>

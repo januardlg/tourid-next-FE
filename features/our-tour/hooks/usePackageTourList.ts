@@ -43,7 +43,7 @@ export const usePackageTourList = () => {
     { length: totalPages },
     (_, index) => index + 1,
   );
-  console.log('arrTotalPages', arrTotalPages);
+  // console.log('arrTotalPages', arrTotalPages);
   //   searching
   const filterSearchOptions: IListOption[] = [
     { id: "", name: "Select Category", disabled: true },
