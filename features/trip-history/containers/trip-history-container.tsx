@@ -25,6 +25,7 @@ const TripHistoryContainer = () => {
     setSortingValue,
     setSelectedCategory,
     setActivePage,
+    handleChangePage,
     handleClickSearch
   } = useTripHistory();
 
@@ -76,6 +77,7 @@ const TripHistoryContainer = () => {
           totalPages={totalPages}
           activePage={activePage}
           setActivePage={setActivePage}
+          onChangePage={handleChangePage}
         />
       </div>
     </section>

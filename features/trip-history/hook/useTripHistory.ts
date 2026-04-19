@@ -85,6 +85,15 @@ const useTripHistory = () => {
     setActivePage(1)
   }
 
+  const handleChangePage = (selectedPage: number) => {
+    setQueryParamsState((prev) => {
+      return {
+        ...prev,
+        page: selectedPage.toString()
+      }
+    })
+  }
+
   useEffect(() => {
     setIsOpenLoadingOverlay(queryResultFetch.isFetching);
   }, [queryResultFetch.isFetching, setIsOpenLoadingOverlay]);
@@ -104,7 +113,8 @@ const useTripHistory = () => {
     setSortingBy,
     setSortingValue,
     setSelectedCategory,
-    handleClickSearch
+    handleChangePage,
+    handleClickSearch,
   };
 };
 

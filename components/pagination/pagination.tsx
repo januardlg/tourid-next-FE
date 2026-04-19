@@ -5,17 +5,17 @@ import ArrowNextIcon from "@/components/icons/arrow-next-icon"
 import { cn } from "@/lib/utils"
 
 interface IPagination {
-    // arrTotalPages: number[]
     totalPages: number,
     activePage: number
     setActivePage: Dispatch<SetStateAction<number>>
-
+    onChangePage: (selectedPage: number) => void
 }
 
 const Pagination = ({
     totalPages,
     activePage,
     setActivePage,
+    onChangePage
 }: IPagination) => {
 
 
@@ -32,6 +32,7 @@ const Pagination = ({
             numberPage += 1;
         }
         setActivePage(numberPage)
+        onChangePage(numberPage)
     };
 
     const handlePrevPage = () => {
@@ -44,6 +45,7 @@ const Pagination = ({
         }
 
         setActivePage(numberPage)
+        onChangePage(numberPage)
     };
 
     return (

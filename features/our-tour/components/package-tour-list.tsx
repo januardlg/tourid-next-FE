@@ -26,6 +26,7 @@ const PackageTourList = () => {
     setFilterValue,
     setSortingBy,
     setSortingValue,
+    handleChangePage,
 
     handleClickSearch
   } = usePackageTourList();
@@ -36,7 +37,7 @@ const PackageTourList = () => {
         <div className="grid grid-cols-12 gap-3 ">
           <div className="col-span-3">
             <p className="text-2xl font-bold">Explore Our Tour</p>
-            <p>{queryResultFetch?.data?.data?.length} Activities Found</p>
+            <p>{queryResultFetch?.data?.meta?.totalData} Activities Found</p>
           </div>
           <div className="col-span-5">
             <SelectWithInput
@@ -81,6 +82,7 @@ const PackageTourList = () => {
             totalPages={totalPages}
             activePage={activePage}
             setActivePage={setActivePage}
+            onChangePage={handleChangePage}
           />
         </div>
       </section>
