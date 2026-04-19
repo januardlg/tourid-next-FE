@@ -46,9 +46,9 @@ const SelectWithInput = ({
           className={cn(
             "w-full py-2.5 px-4 border-t border-r  border-b border-tid-grey-200/20 rounded-tr-sm rounded-br-sm bg-white",
             "focus:outline-none ",
-            'disabled:bg-tid-grey-300 disabled:cursor-not-allowed'
+            // 'disabled:bg-tid-grey-300 disabled:cursor-not-allowed'
           )}
-          disabled={filterBy.id === ""}
+          // disabled={filterBy.id === ""}
           placeholder="Input Search"
           name="filterValue"
           value={filterValue}

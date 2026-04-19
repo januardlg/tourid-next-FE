@@ -1,17 +1,50 @@
 
+import { Dispatch, SetStateAction } from "react"
+
 import ArrowNextIcon from "@/components/icons/arrow-next-icon"
 import { cn } from "@/lib/utils"
 
 interface IPagination {
-    arrTotalPages: number[]
+    // arrTotalPages: number[]
+    totalPages: number,
     activePage: number
-    totalPages: number
-    handleNextPage: () => void
-    handlePrevPage: () => void
+    setActivePage: Dispatch<SetStateAction<number>>
 
 }
 
-const Pagination = ({ handleNextPage, handlePrevPage, arrTotalPages, activePage, totalPages }: IPagination) => {
+const Pagination = ({
+    totalPages,
+    activePage,
+    setActivePage,
+}: IPagination) => {
+
+
+    const arrTotalPages = Array.from(
+        { length: totalPages },
+        (_, index) => index + 1,
+    );
+
+    // FUNCTION FOR PAGINATION
+    const handleNextPage = () => {
+        let numberPage = activePage;
+
+        if (numberPage < totalPages) {
+            numberPage += 1;
+        }
+        setActivePage(numberPage)
+    };
+
+    const handlePrevPage = () => {
+        let numberPage = activePage;
+
+        if (numberPage > 1) {
+            numberPage = numberPage - 1;
+        } else {
+            numberPage = 1;
+        }
+
+        setActivePage(numberPage)
+    };
 
     return (
         <section className="mt-15 w-full flex justify-center items-center">
