@@ -10,8 +10,6 @@ import Button from "@/components/button/button";
 
 const PackageTourList = () => {
   const {
-    arrTotalPages,
-    queryParamsState,
     totalPages,
     filterSearchOptions,
     sortingByOptions,
@@ -19,11 +17,11 @@ const PackageTourList = () => {
     filterValue,
     sortingBy,
     sortingValue,
+    activePage,
+    setActivePage,
 
     queryResultFetch,
 
-    handleNextPage,
-    handlePrevPage,
     setFilterBy,
     setFilterValue,
     setSortingBy,
@@ -80,11 +78,9 @@ const PackageTourList = () => {
         </div>
         <div className="col-span-12">
           <Pagination
-            handleNextPage={handleNextPage}
-            handlePrevPage={handlePrevPage}
-            arrTotalPages={arrTotalPages}
-            activePage={Number.parseInt(queryParamsState.page)}
             totalPages={totalPages}
+            activePage={activePage}
+            setActivePage={setActivePage}
           />
         </div>
       </section>

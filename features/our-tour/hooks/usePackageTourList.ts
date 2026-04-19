@@ -39,14 +39,10 @@ export const usePackageTourList = () => {
   // STATE
   //   pagination
   const totalPages = (queryResultFetch?.data?.meta?.totalPages as number) ?? 1;
-  const arrTotalPages = Array.from(
-    { length: totalPages },
-    (_, index) => index + 1,
-  );
-  // console.log('arrTotalPages', arrTotalPages);
+
   //   searching
   const filterSearchOptions: IListOption[] = [
-    { id: "", name: "Select Category", disabled: true },
+    { id: "", name: "All Category", },
     { id: "name_package", name: "Package Name" },
     // { id: 'start_date', name: 'Start Date' },
     { id: "description", name: "Description" },
@@ -56,7 +52,7 @@ export const usePackageTourList = () => {
 
   //   sorting
   const sortingByOptions: IListOption[] = [
-    { id: "", name: "Select Category", disabled: true },
+    // { id: "", name: "Select Category", disabled: true },
     { id: "start_date", name: "Start Date" },
     { id: "quota", name: "Quota" },
   ];
@@ -64,37 +60,7 @@ export const usePackageTourList = () => {
   const [sortingValue, setSortingValue] = useState<SortingType>("desc");
 
   // FUNCTION FOR PAGINATION
-  const handleNextPage = () => {
-    let numberPage = parseInt(queryParamsState.page || "1");
-
-    if (numberPage < totalPages) {
-      numberPage += 1;
-    }
-
-    setQueryParamsState((prev: PackageTourQueryDTO) => {
-      return {
-        ...prev,
-        page: numberPage.toString(),
-      };
-    });
-  };
-
-  const handlePrevPage = () => {
-    let numberPage = parseInt(queryParamsState.page || "1");
-
-    if (numberPage > 1) {
-      numberPage = numberPage - 1;
-    } else {
-      numberPage = 1;
-    }
-
-    setQueryParamsState((prev) => {
-      return {
-        ...prev,
-        page: numberPage.toString(),
-      };
-    });
-  };
+  const [activePage, setActivePage] = useState<number>(parseInt(initialParamsPackageTour.page))
 
   const handleClickSearch = () => {
     console.log("handleClickSearch");
@@ -111,8 +77,10 @@ export const usePackageTourList = () => {
             ? initialParamsPackageTour?.sortBy
             : (sortingBy.id as string),
         order: sortingValue,
+        page: '1'
       };
     });
+    setActivePage(1)
   };
 
   useEffect(() => {
@@ -120,7 +88,6 @@ export const usePackageTourList = () => {
   }, [queryResultFetch.isFetching, setIsOpenLoadingOverlay]);
 
   return {
-    arrTotalPages,
     queryParamsState,
     totalPages,
     filterSearchOptions,
@@ -129,15 +96,15 @@ export const usePackageTourList = () => {
     filterValue,
     sortingBy,
     sortingValue,
+    activePage,
 
     queryResultFetch,
 
-    handleNextPage,
-    handlePrevPage,
     setFilterBy,
     setFilterValue,
     setSortingBy,
     setSortingValue,
+    setActivePage,
 
     handleClickSearch,
   };

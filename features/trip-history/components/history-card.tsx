@@ -13,7 +13,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { PAYMENT_STATUS } from "../lib/constants"
 dayjs.extend(localizedFormat)
 interface HistoryCardProps {
-    historyData:OrderPackageResponseDTO
+    historyData: OrderPackageResponseDTO
 }
 
 const HistoryCard = ({ historyData }: HistoryCardProps) => {
@@ -34,14 +34,14 @@ const HistoryCard = ({ historyData }: HistoryCardProps) => {
                 </div>
                 <p className="mt-5 text-sm font-semibold">Accomodation Address</p>
                 <p className="">{historyData.hostelryName} </p>
-                <p className="text-sm">{historyData.hostelryLocation} <span><a className="text-blue-600" rel="noopener noreferrer" href={historyData.hostelryAddress} target="_blank">View on map</a></span></p>
+                <p className="text-sm">{historyData.hostelryAddress} <span><a className="text-blue-600" rel="noopener noreferrer" href={historyData.hostelryLocation} target="_blank">View on map</a></span></p>
 
             </div>
             <div className="col-span-3">
                 <p className="text-sm font-semibold">Total Payment</p>
                 <p className="text-2xl text-tid-red-100 font-black mt-1">{getRupiahCurrencyFormat(historyData.totalPayment)} </p>
                 <p className="mt-5 text-sm font-semibold">Payment Status</p>
-                <p className="mt-1 font-semibold">{ historyData.paymentStatus ? PAYMENT_STATUS[historyData.paymentStatus as keyof typeof PAYMENT_STATUS] : '' }</p>
+                <p className="mt-1 font-semibold">{historyData.paymentStatus ? PAYMENT_STATUS[historyData.paymentStatus as keyof typeof PAYMENT_STATUS] : ''}</p>
             </div>
         </div >
     )

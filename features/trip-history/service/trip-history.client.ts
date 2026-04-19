@@ -1,13 +1,23 @@
 import { ApiResponse } from "@/dtos/api-dto";
-import { OrderPackageResponseDTO } from "../lib/trip-history";
+import { MetaOrderPackageTourDTO, OrderPackageResponseDTO, OrderPackageTourQueryDTO } from "../lib/trip-history";
 
-export const getTripHistoryListClient = async () => {
-  const res = await fetch("/api/trip-history", {
+export const getTripHistoryListClient = async (params?: OrderPackageTourQueryDTO) => {
+
+  const queryParams = new URLSearchParams({
+    ...params,
+  });
+
+
+  const res = await fetch("/api/trip-history?" + queryParams.toString(), {
     method: "GET",
   });
 
-  // console.log("RESPONSE CLIENT", res);
+  console.log("RESPONSE CLIENT", res);
 
-  const result: ApiResponse<OrderPackageResponseDTO[]> = await res.json();
+  if (!res.ok) {
+    throw res
+  }
+
+  const result: ApiResponse<OrderPackageResponseDTO[], MetaOrderPackageTourDTO> = await res.json();
   return result;
 };

@@ -15,3 +15,25 @@ export interface OrderPackageResponseDTO {
   createdAt: Date,
   expiredAt: Date,
 }
+
+
+export interface OrderPackageTourQueryDTO {
+  page: string;
+  limit: string;
+  sortBy: string;
+  order?: "asc" | "desc";
+  filterBy?: string;
+  filterValue?: string;
+}
+
+
+export interface MetaOrderPackageTourDTO {
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalData: number;
+  sortBy: string;
+  order: "asc" | "desc";
+  filterBy: string;
+  filterValue: string;
+}

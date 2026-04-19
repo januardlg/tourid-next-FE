@@ -6,6 +6,7 @@ import SelectCategory from "@/components/input/select/select-category";
 
 import useTripHistory from "../hook/useTripHistory";
 import Button from "@/components/button/button";
+import Pagination from "@/components/pagination/pagination";
 
 const TripHistoryContainer = () => {
   const {
@@ -15,13 +16,16 @@ const TripHistoryContainer = () => {
 
     sortingBy,
     sortingValue,
+    categoryOptionsList,
+    selectedCategory,
+    totalPages,
+    activePage,
 
     setSortingBy,
     setSortingValue,
-
-    categoryOptionsList,
-    selectedCategory,
     setSelectedCategory,
+    setActivePage,
+    handleClickSearch
   } = useTripHistory();
 
   const tripHistoryListData = queryResultFetch.data?.data || [];
@@ -31,7 +35,7 @@ const TripHistoryContainer = () => {
       <div className="grid grid-cols-12 gap-3 ">
         <div className="col-span-3">
           <p className="text-2xl font-bold">Explore Our Tour</p>
-          <p>{tripHistoryListData.length} Activities Found</p>
+          <p>{queryResultFetch.data?.meta?.totalData} Activities Found</p>
         </div>
         <div className="col-span-4">
           <SelectCategory
@@ -50,7 +54,7 @@ const TripHistoryContainer = () => {
           />
         </div>
         <div className="col-span-2">
-          <Button onClick={() => {}}>
+          <Button onClick={handleClickSearch}>
             <p>Search</p>
           </Button>
         </div>
@@ -68,11 +72,11 @@ const TripHistoryContainer = () => {
       </div>
 
       <div className="mt-20">
-        {/* <Pagination arrTotalPages={[]} activePage={0} totalPages={0} handleNextPage={function (): void {
-                    throw new Error("Function not implemented.")
-                } } handlePrevPage={function (): void {
-                    throw new Error("Function not implemented.")
-                } } /> */}
+        <Pagination
+          totalPages={totalPages}
+          activePage={activePage}
+          setActivePage={setActivePage}
+        />
       </div>
     </section>
   );

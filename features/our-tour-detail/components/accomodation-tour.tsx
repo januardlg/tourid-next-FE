@@ -11,7 +11,7 @@ const AccomodationTour = ({ hostelryAddress, hostelryPartnerName, hostelryPartne
                 <p className="text-tid-grey-200">Simply arrive at the address below to begin. For the rest of your trip, enjoy all-inclusive daily transport with us, including a comfortable drop-off at your residence after each day’s activities</p>
                 <div className="text-tid-grey-200">
                     <p className="text-lg font-semibold">{hostelryPartnerName}l</p>
-                    <p className="">{hostelryPartnerLocation} <span><a className="text-blue-600" rel="noopener noreferrer" href={hostelryAddress} target="_blank">View on map</a></span></p>
+                    <p className="">{hostelryAddress} <span><a className="text-blue-600" rel="noopener noreferrer" href={hostelryPartnerLocation} target="_blank">View on map</a></span></p>
                 </div>
             </div>
         </section >
