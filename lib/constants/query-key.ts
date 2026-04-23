@@ -7,6 +7,7 @@ interface QueryKeys {
   };
   tripHistory: {
     tripHistoryList: (params: any) => string[];
+    tripHistoryDetail: (params: any) => string[];
   };
   common: {
     paymentMethodList: () => string[];
@@ -20,6 +21,7 @@ export const QUERY_KEYS_CONSTANTS: QueryKeys = {
   },
   tripHistory: {
     tripHistoryList: (params: any) => ["trip-history-list", params],
+    tripHistoryDetail: (params: any) => ["trip-history-detail", params],
   },
   common: {
     paymentMethodList: () => ["payment-method-list"],

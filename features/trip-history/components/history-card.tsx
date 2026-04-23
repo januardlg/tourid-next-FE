@@ -11,14 +11,21 @@ import { OrderPackageResponseDTO } from "../lib/trip-history"
 import { getDurationDate, getRupiahCurrencyFormat } from "@/lib/utils"
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { PAYMENT_STATUS } from "../lib/constants"
+import { useRouter } from 'next/navigation'
 dayjs.extend(localizedFormat)
 interface HistoryCardProps {
     historyData: OrderPackageResponseDTO
 }
 
 const HistoryCard = ({ historyData }: HistoryCardProps) => {
+    const router = useRouter()
+
     return (
-        <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200">
+        <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200"
+            onClick={() =>{
+                router.push('/trip-history/' + historyData.orderTourPackageId)
+            }}
+        >
             <div className="col-span-3">
                 <Image src={`/images/step-content.png`} alt="content" width={200} height={200} className="w-full h-full rounded-xl" />
             </div>

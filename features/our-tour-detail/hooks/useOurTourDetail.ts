@@ -135,13 +135,26 @@ export const useOurTourDetail = (tourId: string) => {
     onSuccess: (data: ApiResponse<CreateOrderPackageTourResponseDTO>, variables, context) => {
       // Boom baby!
       setIsOpenModal(true)
+
+      data.statusCode === 200 ? 
       setModalContent({
-        title: 'SUCCESS',
-        notes: data.message + 'complete payment before expired',
+        title:'Success',
+        notes: data.message + ' complete payment before expired',
         cancelHandle: () => {
-          router.push('/our-tour/' + tourId)
+         router.push('/trip-history/' + data?.data?.orderTourPackageId)
         },
+      }) : setModalContent({
+        title:'Failed ',
+        notes: data.message ,
       })
+
+      // setModalContent({
+      //   title: data?.statusCode === 200 ? 'Success' :'Failed ',
+      //   notes: data.message +   'complete payment before expired',
+      //   cancelHandle: () => {
+      //    data?.statusCode === 200 && router.push('/trip-history/' + data?.data?.orderTourPackageId)
+      //   },
+      // })
     },
   })
 
@@ -152,7 +165,7 @@ export const useOurTourDetail = (tourId: string) => {
     });
 
   const handleNumberOfGuest = (value: IListOption) => {
-    const totalPayment = Number(value.name) * 40000;
+    const totalPayment = Number(value.name) * Number(queryResultFetch?.data?.data?.cost);
     setNumberOfGuest(value);
     setValue("totalPayment", totalPayment.toString());
   };

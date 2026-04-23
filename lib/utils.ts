@@ -17,7 +17,7 @@ export const getDateISOFormat = (date: string): string => {
 };
 
 export const getRupiahCurrencyFormat = (amount: string) => {
-  const rawValue = amount.replace(/\D/g, "");
+  const rawValue = amount?.replace(/\D/g, "");
   const numberValue = Number(rawValue);
 
   const formatted = numberValue.toLocaleString("id-ID", {

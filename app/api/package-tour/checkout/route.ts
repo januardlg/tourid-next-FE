@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
     try {
         const accessToken = request.cookies.get("accessToken")?.value
         const body = await request.json();
+        console.log('body server', body)
 
         if (!accessToken) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -26,14 +27,17 @@ export async function POST(request: NextRequest) {
 
         console.log('res server', res)
 
-        if (!res.ok) {
-            return NextResponse.json(
-                { message: res.statusText },
-                { status: res.status }
-            );
-        }
+    
 
         const result: ApiResponse<CreateOrderPackageTourResponseDTO> = await res.json();
+
+        // if (!res.ok) {
+        // return NextResponse.json(
+        //     { message: result.message },
+        //     { status: res.status }
+        // );
+        // }
+
         return Response.json(result)
 
     } catch (error) {
