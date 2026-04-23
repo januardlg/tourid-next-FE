@@ -4,9 +4,10 @@ import { useAppStore } from "@/providers/app-store-provider"
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react"
 import Button from "../button/button"
+import { initModalContent } from "@/stores/slices/modal-slice"
 
 const ModalUI = () => {
-    const { isOpenModal, setIsOpenModal, modalContent } = useAppStore((state) => state)
+    const { isOpenModal, setIsOpenModal, modalContent, setModalContent } = useAppStore((state) => state)
 
     return (
         <Dialog open={isOpenModal} onClose={setIsOpenModal} className="relative z-50">
@@ -21,10 +22,25 @@ const ModalUI = () => {
                     <p className="mt-2 text-tid-red-100 text-center">
                         {modalContent?.notes}
                     </p>
-                    <div className="mt-4 w-full flex justify-center ">
-                        <div className="w-fit">
+                    <div className="mt-4 w-full flex justify-center  space-x-3">
+                        {modalContent?.okHanlde && modalContent.okText && (
+                            <div className="min-w-25">
+                                <Button variant="PRIMARY"
+                                    onClick={() => {
+                                        modalContent.okHanlde && modalContent?.okHanlde()
+                                        setIsOpenModal(false)
+                                        setModalContent(initModalContent)
+                                    }}
+                                >
+                                    <p className="text-white">{modalContent?.okText ?? 'OK'}</p>
+                                </Button>
+                            </div>
+                        )}
+                        <div className="min-w-25">
                             <Button variant="OUTLINE" onClick={() => {
                                 setIsOpenModal(false)
+                                modalContent?.cancelHandle && modalContent.cancelHandle()
+                                setModalContent(initModalContent)
                             }}>
                                 <p className="text-tid-red-100">{modalContent?.cancelText ?? 'Cancel'}</p>
                             </Button>

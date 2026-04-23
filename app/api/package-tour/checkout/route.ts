@@ -5,23 +5,39 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
 
     try {
-        const body = await request.json()
+        const accessToken = request.cookies.get("accessToken")?.value
+        const body = await request.json();
 
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/orderPackageTour?", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `Bearer ${request.cookies.get("accessToken")?.value}`,
-            },
-            body: request.body
-        });
+        if (!accessToken) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
+        const res = await fetch(
+            process.env.NEXT_PUBLIC_API_URL + "/orderPackageTour",
+            {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(body),
+            }
+        );
+
+        console.log('res server', res)
+
+        if (!res.ok) {
+            return NextResponse.json(
+                { message: res.statusText },
+                { status: res.status }
+            );
+        }
 
         const result: ApiResponse<CreateOrderPackageTourResponseDTO> = await res.json();
-
-        return Response.json(result);
+        return Response.json(result)
 
     } catch (error) {
-        return NextResponse.json(error)
+        // if route handler error
+        throw error
     }
-
 }

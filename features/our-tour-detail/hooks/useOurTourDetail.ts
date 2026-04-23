@@ -8,28 +8,34 @@ import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 import {
   AddOrderPackagePayload,
   addOrderPackagePayloadSchema,
+  CreateOrderPackageTourResponseDTO,
 } from "../lib/our-tour-detail-schema";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
 import {
   getPackageTourDetailClient,
   getPaymentMethodListClient,
 } from "../services/tour-detail.client";
 import { ITermConditionTour } from "../components/term-condition-tour";
+import { checkoutPackageTour } from "../services/tour-checkout.client";
+import { useAppStore } from "@/providers/app-store-provider";
+import { useRouter } from 'next/navigation'
+import { ApiResponse } from "@/dtos/api-dto";
+import { AppError } from "@/lib/response-handler";
 
-const PaymentMethodOptions: IListOption[] = [
-  { id: "option", name: "Select Payment Method", disabled: true },
-  { id: 1, name: "BCA" },
-  { id: 2, name: "MANDIRI" },
-];
 
 export const useOurTourDetail = (tourId: string) => {
+  const router = useRouter()
+  const { setIsOpenModal, setModalContent } = useAppStore((store) => store)
+
+  // FETCH DETAIL
   const queryResultFetch = useQuery({
     queryKey: QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(tourId),
     queryFn: () => getPackageTourDetailClient(tourId),
     staleTime: 60_000,
   });
 
+  // FETCH PAYMENT METHOD
   const queryPaymentMethodList = useQuery({
     queryKey: QUERY_KEYS_CONSTANTS.common.paymentMethodList(),
     queryFn: () => {
@@ -38,8 +44,6 @@ export const useOurTourDetail = (tourId: string) => {
     },
     staleTime: 60_000,
   });
-
-  console.log("queryPaymentMethodList", queryPaymentMethodList?.data?.data);
 
   const numberOfGuestListOption: IListOption[] = Array.from([
     { id: "option", name: "Select Number Of Guest", disabled: true },
@@ -85,10 +89,10 @@ export const useOurTourDetail = (tourId: string) => {
       title: "Duration",
       description: queryResultFetch?.data?.data
         ? `${new Date(
-            queryResultFetch.data.data.starDate,
-          ).toLocaleDateString()} - ${new Date(
-            queryResultFetch.data.data.starDate,
-          ).toLocaleDateString()}`
+          queryResultFetch.data.data.starDate,
+        ).toLocaleDateString()} - ${new Date(
+          queryResultFetch.data.data.starDate,
+        ).toLocaleDateString()}`
         : "",
     },
     {
@@ -105,11 +109,41 @@ export const useOurTourDetail = (tourId: string) => {
   );
 
   const initialAddOrderPackagePayload: AddOrderPackagePayload = {
-    tourPackageId: 2,
+    tourPackageId: parseInt(tourId),
     paymentMethodId: 0,
     numberOfGuests: 0,
     totalPayment: "0",
   };
+
+  // HANDLE CREATE ORDER
+  const mutation = useMutation({
+    mutationFn: async (payloadCheckoutPackageTour: AddOrderPackagePayload) => {
+      return await checkoutPackageTour(payloadCheckoutPackageTour)
+    },
+    onError: (error: AppError, variables, context) => {
+      // An error happened!
+      setIsOpenModal(true)
+      setModalContent({
+        title: error?.status ? error?.status.toString() : 'Error',
+        notes: error?.status === 401 ? error?.message + ' - go to login page?' : error?.message,
+        okText: 'OK',
+        okHanlde: () => {
+          router.push('/login')
+        },
+      })
+    },
+    onSuccess: (data: ApiResponse<CreateOrderPackageTourResponseDTO>, variables, context) => {
+      // Boom baby!
+      setIsOpenModal(true)
+      setModalContent({
+        title: 'SUCCESS',
+        notes: data.message + 'complete payment before expired',
+        cancelHandle: () => {
+          router.push('/our-tour/' + tourId)
+        },
+      })
+    },
+  })
 
   const { control, handleSubmit, formState, setValue, getValues } =
     useForm<AddOrderPackagePayload>({
@@ -127,10 +161,10 @@ export const useOurTourDetail = (tourId: string) => {
     setPaymentMethod(value);
   };
 
-  const onSubmit: SubmitHandler<AddOrderPackagePayload> = (
+  const onSubmit: SubmitHandler<AddOrderPackagePayload> = async (
     data: AddOrderPackagePayload,
   ) => {
-    console.log("data", data);
+    await mutation.mutate(data)
   };
 
   const onError: SubmitErrorHandler<AddOrderPackagePayload> = (errors) => {
@@ -156,5 +190,6 @@ export const useOurTourDetail = (tourId: string) => {
     handleSubmit,
     onSubmit,
     onError,
+    mutation,
   };
 };

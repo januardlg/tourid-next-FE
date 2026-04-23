@@ -10,7 +10,6 @@ import {
   UseFormHandleSubmit,
 } from "react-hook-form";
 
-import { useOurTourDetail } from "../hooks/useOurTourDetail";
 import { AddOrderPackagePayload } from "../lib/our-tour-detail-schema";
 import { getRupiahCurrencyFormat } from "@/lib/utils";
 
@@ -91,10 +90,10 @@ const ActionForm = ({
       <Button onClick={handleSubmit(onSubmit, onError)}>
         <p>Confirm Booking</p>
       </Button>
-      <Button variant="OUTLINE" onClick={() => {}}>
+      <Button variant="OUTLINE" onClick={() => { }}>
         <p>Save To Wishlist</p>
       </Button>
-      <Button variant="OUTLINE" onClick={() => {}}>
+      <Button variant="OUTLINE" onClick={() => { }}>
         <p>Share The Activity</p>
       </Button>
     </div>
