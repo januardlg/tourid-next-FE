@@ -24,10 +24,11 @@ export async function POST(request: NextRequest) {
       },
     );
 
+    if(!res.ok && res.status === 401){
+        return NextResponse.json({ message: "You are unauthorized, go to login page?" }, { status: 401 });
+    }
     
     const result: ApiResponse<ConfirmPaymentPayloadDTO> = await res.json();
-    console.log("res confirm server ", res);
-     console.log("result confirm server ", result);
 
     if (!res.ok) {
       return NextResponse.json(

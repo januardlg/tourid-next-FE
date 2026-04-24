@@ -21,7 +21,7 @@ const HistoryCard = ({ historyData }: HistoryCardProps) => {
     const router = useRouter()
 
     return (
-        <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200"
+        <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200 cursor-pointer"
             onClick={() => {
                 router.push('/trip-history/' + historyData.orderTourPackageId)
             }}

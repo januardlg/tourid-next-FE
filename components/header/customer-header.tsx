@@ -48,12 +48,14 @@ const CustomerHeader = ({ dataUser }: { dataUser: IUserData | undefined }) => {
   return (
     <header className="grid grid-cols-12">
       <div className="col-span-6">
-        <Image
-          src={`/icons/tourid-logo.png`}
-          alt="Tour Id"
-          width={100}
-          height={100}
-        />
+        <Link href={"/home"}>
+          <Image
+            src={`/icons/tourid-logo.png`}
+            alt="Tour Id"
+            width={100}
+            height={100}
+          />
+        </Link>
       </div>
       <div className="col-span-6 flex justify-end space-x-8">
         {MENU_HEADER.map((menu) => {
