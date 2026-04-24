@@ -8,7 +8,7 @@ import ClockIcon from "@/components/icons/clock-icon"
 // utils
 import dayjs from "dayjs"
 import { OrderPackageResponseDTO } from "../lib/trip-history"
-import { getDurationDate, getRupiahCurrencyFormat } from "@/lib/utils"
+import { getDateFormatFromDate, getDurationDate, getRupiahCurrencyFormat } from "@/lib/utils"
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { PAYMENT_STATUS } from "../lib/constants"
 import { useRouter } from 'next/navigation'
@@ -22,7 +22,7 @@ const HistoryCard = ({ historyData }: HistoryCardProps) => {
 
     return (
         <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200"
-            onClick={() =>{
+            onClick={() => {
                 router.push('/trip-history/' + historyData.orderTourPackageId)
             }}
         >
@@ -33,7 +33,7 @@ const HistoryCard = ({ historyData }: HistoryCardProps) => {
                 <p className="text-lg font-semibold  text-black">{historyData.packageTourName}</p>
                 <div className="flex-align-items-center space-x-1.5 mt-2.5">
                     <CalendarIcon />
-                    <p>{dayjs(historyData.packageTourStartDate).format('L')}</p>
+                    <p>{getDateFormatFromDate(historyData.packageTourStartDate)}</p>
                 </div>
                 <div className="flex-align-items-center space-x-1.5">
                     <ClockIcon />

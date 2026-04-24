@@ -14,7 +14,7 @@ interface TripHistoryDetailProps {
 }
 
 const TripHistoryDetail = ({ orderPackageId }: TripHistoryDetailProps) => {
-  const { TERM_CONDITIONS, queryResult } = useTripHistoryDetail(orderPackageId);
+  const { TERM_CONDITIONS, queryResult, handleConfirmPayment } = useTripHistoryDetail(orderPackageId);
 
   const data = queryResult?.data?.data;
 
@@ -34,6 +34,7 @@ const TripHistoryDetail = ({ orderPackageId }: TripHistoryDetailProps) => {
         <div className="col-span-6">
           <HistoryPaymentLogs
             packageDetail={data as OrderPackageTourDetailResponseDTO}
+            onConfirmPayment={handleConfirmPayment}
           />
         </div>
       </section>

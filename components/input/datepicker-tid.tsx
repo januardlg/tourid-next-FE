@@ -1,12 +1,23 @@
 import { useRef, useState } from "react";
 import { IInputTid } from "./input";
 import CalendarIcon from "../icons/calendar-icon";
-import { cn, getDateFormat, getDateISOFormat } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import dayjs from "dayjs";
 
 interface IDatePicker extends IInputTid {
     minDate?: string,
     handleChangeDate: (deliveryDate: string) => void;
 }
+
+export const getDateFormat = (date: string): string => {
+    const formattedDate = dayjs(date).format("DD/MM/YYYY");
+    return formattedDate;
+};
+
+export const getDateISOFormat = (date: string): string => {
+    const isoStringSpecific = dayjs(date).format();
+    return isoStringSpecific;
+};
 
 const DatePickerTid = ({
     label,

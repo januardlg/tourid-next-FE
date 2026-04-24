@@ -22,6 +22,7 @@ import { useAppStore } from "@/providers/app-store-provider";
 import { useRouter } from 'next/navigation'
 import { ApiResponse } from "@/dtos/api-dto";
 import { AppError } from "@/lib/response-handler";
+import { getDateFormatFromDate } from "@/lib/utils";
 
 
 export const useOurTourDetail = (tourId: string) => {
@@ -88,11 +89,7 @@ export const useOurTourDetail = (tourId: string) => {
     {
       title: "Duration",
       description: queryResultFetch?.data?.data
-        ? `${new Date(
-          queryResultFetch.data.data.starDate,
-        ).toLocaleDateString()} - ${new Date(
-          queryResultFetch.data.data.starDate,
-        ).toLocaleDateString()}`
+        ? `${getDateFormatFromDate(queryResultFetch.data.data.starDate)} - ${getDateFormatFromDate(queryResultFetch.data.data.endDate)}`
         : "",
     },
     {
@@ -136,25 +133,17 @@ export const useOurTourDetail = (tourId: string) => {
       // Boom baby!
       setIsOpenModal(true)
 
-      data.statusCode === 200 ? 
-      setModalContent({
-        title:'Success',
-        notes: data.message + ' complete payment before expired',
-        cancelHandle: () => {
-         router.push('/trip-history/' + data?.data?.orderTourPackageId)
-        },
-      }) : setModalContent({
-        title:'Failed ',
-        notes: data.message ,
-      })
-
-      // setModalContent({
-      //   title: data?.statusCode === 200 ? 'Success' :'Failed ',
-      //   notes: data.message +   'complete payment before expired',
-      //   cancelHandle: () => {
-      //    data?.statusCode === 200 && router.push('/trip-history/' + data?.data?.orderTourPackageId)
-      //   },
-      // })
+      data.statusCode === 200 ?
+        setModalContent({
+          title: 'Success',
+          notes: data.message + ' complete payment before expired',
+          cancelHandle: () => {
+            router.push('/trip-history/' + data?.data?.orderTourPackageId)
+          },
+        }) : setModalContent({
+          title: 'Failed ',
+          notes: data.message,
+        })
     },
   })
 

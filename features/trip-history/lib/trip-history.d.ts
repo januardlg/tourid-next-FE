@@ -37,3 +37,18 @@ export interface MetaOrderPackageTourDTO {
   filterBy: string;
   filterValue: string;
 }
+
+
+export const ConfirmPaymentPayloadSchema = z.object({
+  referenceNumber: z.string(),
+  orderTourPackageId: z.number()
+})
+
+
+export type ConfirmPaymentPayloadDTO = z.infer<typeof ConfirmPaymentPayloadSchema>;
+
+export interface ConfirmPaymentResponseDTO {
+  orderTourPackageId: number;
+  referenceNumber: string;
+  paymentStatus: string;
+}
