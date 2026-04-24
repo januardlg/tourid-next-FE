@@ -7,8 +7,6 @@ export async function GET(
   { params }: { params: Promise<{ orderPackageId: string }> },
 ) {
   try {
-    console.log("ACCESS TOKEN", request.cookies.get("accessToken")?.value);
-
     const { orderPackageId } = await params;
 
     const res = await fetch(
@@ -22,16 +20,15 @@ export async function GET(
       },
     );
 
-    console.log("RESPONSE SERVER", res);
-    if (!res.ok) {
-      return NextResponse.json(
-        { message: res.statusText },
-        { status: res.status },
-      );
-    }
-
     const result: ApiResponse<OrderPackageTourDetailResponseDTO> =
       await res.json();
+
+    if (!res.ok) {
+      return NextResponse.json(
+        { message: result.message },
+        { status: res.status, statusText:result.message},
+      );
+    }
 
     return NextResponse.json(result);
   } catch (error) {

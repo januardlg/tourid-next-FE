@@ -1,13 +1,19 @@
 "use client";
-import DescriptionTour from "@/features/our-tour-detail/components/description-tour";
 import Image from "next/image";
+
+// hooks
 import { useTripHistoryDetail } from "../hooks/useTripHistoryDetail";
+
+// libs, interface, and dtos
+import { OrderPackageTourDetailResponseDTO } from "../lib/trip-history-detail";
+
+// components
+import DescriptionTour from "@/features/our-tour-detail/components/description-tour";
 import TermConditionTour from "@/features/our-tour-detail/components/term-condition-tour";
 import Divider from "@/features/home/components/divider";
 import ActivityList from "@/features/our-tour-detail/components/activity-list";
 import AccomodationTour from "@/features/our-tour-detail/components/accomodation-tour";
 import HistoryPaymentLogs from "./history-payment-logs";
-import { OrderPackageTourDetailResponseDTO } from "../lib/trip-history-detail";
 
 interface TripHistoryDetailProps {
   orderPackageId: string;

@@ -1,33 +1,43 @@
 import { useState } from "react";
 
-import { IListOption } from "@/features/home/components/list-box";
-
+// zod and react-hook
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 
-import {
-  AddOrderPackagePayload,
-  addOrderPackagePayloadSchema,
-  CreateOrderPackageTourResponseDTO,
-} from "../lib/our-tour-detail-schema";
+// react query
 import { useMutation, useQuery } from "@tanstack/react-query";
+
+// function request for bff
+import { checkoutPackageTour } from "../services/tour-checkout.client";
+
+// zustand
+import { useAppStore } from "@/providers/app-store-provider";
+
+// next
+import { useRouter } from "next/navigation";
+
+// libs, interface, and dtos
+import { ApiResponse } from "@/dtos/api-dto";
+import { AppError } from "@/lib/response-handler";
+import { getDateFormatFromDate } from "@/lib/utils";
+import { ITermConditionTour } from "../components/term-condition-tour";
 import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
 import {
   getPackageTourDetailClient,
   getPaymentMethodListClient,
 } from "../services/tour-detail.client";
-import { ITermConditionTour } from "../components/term-condition-tour";
-import { checkoutPackageTour } from "../services/tour-checkout.client";
-import { useAppStore } from "@/providers/app-store-provider";
-import { useRouter } from 'next/navigation'
-import { ApiResponse } from "@/dtos/api-dto";
-import { AppError } from "@/lib/response-handler";
-import { getDateFormatFromDate } from "@/lib/utils";
+import {
+  AddOrderPackagePayload,
+  addOrderPackagePayloadSchema,
+  CreateOrderPackageTourResponseDTO,
+} from "../lib/our-tour-detail-schema";
+import { IListOption } from "@/features/home/components/list-box";
 
 
 export const useOurTourDetail = (tourId: string) => {
-  const router = useRouter()
-  const { setIsOpenModal, setModalContent } = useAppStore((store) => store)
+  const router = useRouter();
+  const { setIsOpenModal, setModalContent, setIsOpenLoadingOverlay } =
+    useAppStore((store) => store);
 
   // FETCH DETAIL
   const queryResultFetch = useQuery({
@@ -115,37 +125,51 @@ export const useOurTourDetail = (tourId: string) => {
   // HANDLE CREATE ORDER
   const mutation = useMutation({
     mutationFn: async (payloadCheckoutPackageTour: AddOrderPackagePayload) => {
-      return await checkoutPackageTour(payloadCheckoutPackageTour)
+      return await checkoutPackageTour(payloadCheckoutPackageTour);
     },
-    onError: (error: AppError, variables, context) => {
-      // An error happened!
-      setIsOpenModal(true)
-      setModalContent({
-        title: error?.status ? error?.status.toString() : 'Error',
-        notes: error?.status === 401 ? error?.message + ' - go to login page?' : error?.message,
-        okText: 'OK',
-        okHanlde: () => {
-          router.push('/login')
-        },
-      })
+    onMutate: () => {
+      setIsOpenLoadingOverlay(true);
     },
-    onSuccess: (data: ApiResponse<CreateOrderPackageTourResponseDTO>, variables, context) => {
-      // Boom baby!
-      setIsOpenModal(true)
+    onSettled: () => {
+      setIsOpenLoadingOverlay(false);
+    },
+    onError: (error: AppError) => {
+      setIsOpenModal(true);
+      error?.status == 401
+        ? setModalContent({
+            title: "Error",
+            notes: error?.message,
+            okText: "Login Now",
+            okHanlde: () => {
+              router.push("/login");
+            },
+          })
+        : setModalContent({
+            title: "Error",
+            notes: error?.message,
+            cancelText: "I Understand",
+          });
+    },
+    onSuccess: (data: ApiResponse<CreateOrderPackageTourResponseDTO>) => {
+      console.log("onSuccess");
 
-      data.statusCode === 200 ?
-        setModalContent({
-          title: 'Success',
-          notes: data.message + ' complete payment before expired',
-          cancelHandle: () => {
-            router.push('/trip-history/' + data?.data?.orderTourPackageId)
-          },
-        }) : setModalContent({
-          title: 'Failed ',
-          notes: data.message,
-        })
+      setIsOpenModal(true);
+
+      data.statusCode === 200
+        ? setModalContent({
+            title: "Success",
+            notes: data.message,
+            cancelText: "Go to Order Detail",
+            cancelHandle: () => {
+              router.push("/trip-history/" + data?.data?.orderTourPackageId);
+            },
+          })
+        : setModalContent({
+            title: "Failed ",
+            notes: data.message,
+          });
     },
-  })
+  });
 
   const { control, handleSubmit, formState, setValue, getValues } =
     useForm<AddOrderPackagePayload>({
@@ -154,7 +178,8 @@ export const useOurTourDetail = (tourId: string) => {
     });
 
   const handleNumberOfGuest = (value: IListOption) => {
-    const totalPayment = Number(value.name) * Number(queryResultFetch?.data?.data?.cost);
+    const totalPayment =
+      Number(value.name) * Number(queryResultFetch?.data?.data?.cost);
     setNumberOfGuest(value);
     setValue("totalPayment", totalPayment.toString());
   };
@@ -166,7 +191,7 @@ export const useOurTourDetail = (tourId: string) => {
   const onSubmit: SubmitHandler<AddOrderPackagePayload> = async (
     data: AddOrderPackagePayload,
   ) => {
-    await mutation.mutate(data)
+    mutation.mutate(data);
   };
 
   const onError: SubmitErrorHandler<AddOrderPackagePayload> = (errors) => {

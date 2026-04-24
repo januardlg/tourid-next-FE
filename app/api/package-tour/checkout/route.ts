@@ -5,12 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
 
     try {
-        const accessToken = request.cookies.get("accessToken")?.value
+        const accessToken = request?.cookies?.get("accessToken")?.value
         const body = await request.json();
-        console.log('body server', body)
 
         if (!accessToken) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ message: "You are unauthorized, go to login page?" }, { status: 401 });
         }
 
         const res = await fetch(
@@ -25,18 +24,14 @@ export async function POST(request: NextRequest) {
             }
         );
 
-        console.log('res server', res)
+        const result: ApiResponse<CreateOrderPackageTourResponseDTO> = await res?.json();
 
-    
-
-        const result: ApiResponse<CreateOrderPackageTourResponseDTO> = await res.json();
-
-        // if (!res.ok) {
-        // return NextResponse.json(
-        //     { message: result.message },
-        //     { status: res.status }
-        // );
-        // }
+        if (!res.ok) {
+            return NextResponse.json(
+                { message: result.message },
+                { status: res.status, statusText:result.message },
+            );
+        }
 
         return Response.json(result)
 

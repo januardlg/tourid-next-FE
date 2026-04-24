@@ -1,20 +1,32 @@
-import { ITermConditionTour } from "@/features/our-tour-detail/components/term-condition-tour";
-import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import getTripHistoryDetail from "../services/trip-history-detail";
-import { useAppStore } from "@/providers/app-store-provider";
-import { confirmPaymentOrderPackageTour } from "../services/trip-confirmation-payment.client";
-import { ConfirmPaymentPayloadDTO, ConfirmPaymentResponseDTO } from "@/features/trip-history/lib/trip-history";
-import { AppError } from "@/lib/response-handler";
+// next
 import { useRouter } from "next/navigation";
+
+// react query
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+// zustand
+import { useAppStore } from "@/providers/app-store-provider";
+
+// function request for bff
+import { confirmPaymentOrderPackageTour } from "../services/trip-confirmation-payment.client";
+import { getTripHistoryDetail } from "../services/trip-history-detail";
+
+// libs, interface, and dtos
 import { ApiResponse } from "@/dtos/api-dto";
-import { makeQueryClient } from "@/lib/query";
+import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
+import { AppError } from "@/lib/response-handler";
+import { ITermConditionTour } from "@/features/our-tour-detail/components/term-condition-tour";
+import {
+  ConfirmPaymentPayloadDTO,
+  ConfirmPaymentResponseDTO,
+} from "@/features/trip-history/lib/trip-history";
+
 
 export const useTripHistoryDetail = (orderPackageId: string) => {
-
-  const router = useRouter()
-  const { setIsOpenModal, setModalContent } = useAppStore((store) => store)
-  const queryClient = makeQueryClient();
+  const router = useRouter();
+  const { setIsOpenModal, setModalContent, setIsOpenLoadingOverlay } =
+    useAppStore((store) => store);
+  const queryClient = useQueryClient();
 
   const queryResult = useQuery({
     queryKey: QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(orderPackageId),
@@ -49,51 +61,66 @@ export const useTripHistoryDetail = (orderPackageId: string) => {
     },
   ];
 
-
-  // HANDLE CREATE ORDER
+  // HANDLE CONFIRMATION PAYMENT
   const mutation = useMutation({
     mutationFn: async (payloadConfirmPayment: ConfirmPaymentPayloadDTO) => {
-      return await confirmPaymentOrderPackageTour(payloadConfirmPayment)
+      return await confirmPaymentOrderPackageTour(payloadConfirmPayment);
     },
-    onError: (error: AppError, variables, context) => {
-      // An error happened!
-      setIsOpenModal(true)
-      setModalContent({
-        title: error?.status ? error?.status.toString() : 'Error',
-        notes: error?.status === 401 ? error?.message + ' - go to login page?' : error?.message,
-        okText: 'OK',
-        okHanlde: () => {
-          router.push('/login')
-        },
-      })
+    onMutate: () => {
+      setIsOpenLoadingOverlay(true);
     },
-    onSuccess: (data: ApiResponse<ConfirmPaymentResponseDTO>, variables, context) => {
-      // Boom baby!
-      const queryKey = QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(orderPackageId)
-      queryClient.invalidateQueries(queryKey)
-      setIsOpenModal(true)
+    onSettled: () => {
+      setIsOpenLoadingOverlay(false);
+    },
+    onError: (error: AppError) => {
+      setIsOpenModal(true);
+      error?.status == 401
+        ? setModalContent({
+            title: "Error",
+            notes: error?.message,
+            okText: "Login Now",
+            okHanlde: () => {
+              router.push("/login");
+            },
+          })
+        : setModalContent({
+            title: "Error",
+            notes: error?.message,
+            cancelText: "I Understand",
+          });
+    },
+    onSuccess: (data: ApiResponse<ConfirmPaymentResponseDTO>) => {
+      setIsOpenModal(true);
+      data.statusCode === 200
+        ? setModalContent({
+            title: "Success",
+            notes: data.message,
+            cancelText: "Got it",
+            cancelHandle: () => {
+              router.refresh();
+            },
+          })
+        : setModalContent({
+            title: "Failed",
+            notes: data.message,
+            cancelText: "I Understand",
+          });
+      queryClient.invalidateQueries({
+        queryKey:
+          QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(orderPackageId),
+      });
+    },
+  });
 
-      data.statusCode === 200 ?
-        setModalContent({
-          title: 'Success',
-          notes: data.message + ' please wait for our verification',
-          cancelHandle: () => {
-            router.push('/trip-history/' + orderPackageId)
-          },
-        }) : setModalContent({
-          title: 'Failed ',
-          notes: data.message,
-        })
-    },
-  })
-
-  const handleConfirmPayment = async (dataConfirm: ConfirmPaymentPayloadDTO) => {
-    await mutation.mutate(dataConfirm)
-  }
+  const handleConfirmPayment = async (
+    dataConfirm: ConfirmPaymentPayloadDTO,
+  ) => {
+    mutation.mutate(dataConfirm);
+  };
 
   return {
     TERM_CONDITIONS,
     queryResult,
-    handleConfirmPayment
+    handleConfirmPayment,
   };
 };

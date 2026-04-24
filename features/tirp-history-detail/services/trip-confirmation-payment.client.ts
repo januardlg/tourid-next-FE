@@ -9,13 +9,11 @@ export const confirmPaymentOrderPackageTour = async (dataPayload: ConfirmPayment
             method: 'POST',
             body: JSON.stringify(dataPayload)
         })
-
-        console.log('res confirn', res)
-        if (!res.ok) {
-            throw createError(res?.statusText, res?.status)
-        }
-
         const result: ApiResponse<ConfirmPaymentResponseDTO> = await res.json()
+
+        if (!res.ok) {
+            throw createError(result?.message, res?.status)
+        }
 
         return result
     } catch (error) {

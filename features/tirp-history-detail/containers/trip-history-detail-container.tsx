@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import TripHistoryDetail from "../components/trip-history-detail";
 import { makeQueryClient } from "@/lib/query";
 import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
-import getTripHistoryDetail from "../services/trip-history-detail";
+import { getTripHistoryDetail } from "../services/trip-history-detail";
 
 interface TripHistoryDetailContainerProps {
   orderPackageId: string;

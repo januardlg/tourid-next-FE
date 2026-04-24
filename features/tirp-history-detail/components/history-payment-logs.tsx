@@ -1,43 +1,64 @@
 import { useEffect, useState } from "react";
+
+// components 
 import Button from "@/components/button/button";
-import { IPaymentStatus, PAYMENT_STATUS } from "@/features/trip-history/lib/constants";
-import { OrderPackageTourDetailResponseDTO } from "../lib/trip-history-detail";
-import { getChunkAccountNumber, getDateFormatFromDateWithTime, getPaymentStatusText, getRupiahCurrencyFormat } from "@/lib/utils";
-import { getCountdownFormatFromSeconds, getPaymentTimeLeftInSeconds } from "../lib/utils";
+
+// libs, interface, and dtos
+import {
+  IPaymentStatus,
+} from "@/features/trip-history/lib/constants";
 import { ConfirmPaymentPayloadDTO } from "@/features/trip-history/lib/trip-history";
+import { OrderPackageTourDetailResponseDTO } from "../lib/trip-history-detail";
+import {
+  getChunkAccountNumber,
+  getDateFormatFromDateWithTime,
+  getPaymentStatusText,
+  getRupiahCurrencyFormat,
+} from "@/lib/utils";
+import {
+  getCountdownFormatFromSeconds,
+  getPaymentTimeLeftInSeconds,
+} from "../lib/utils";
 
 interface HistoryPaymentLogs {
   packageDetail: OrderPackageTourDetailResponseDTO;
-  onConfirmPayment: (dataConfirm: ConfirmPaymentPayloadDTO) => void
+  onConfirmPayment: (dataConfirm: ConfirmPaymentPayloadDTO) => void;
 }
 
-const HistoryPaymentLogs = ({ packageDetail, onConfirmPayment }: HistoryPaymentLogs) => {
+const HistoryPaymentLogs = ({
+  packageDetail,
+  onConfirmPayment,
+}: HistoryPaymentLogs) => {
   const paymentStatus = packageDetail?.paymentStatus;
 
-  const [timeLeft, setTimeLeft] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
-    if (timeLeft <= 0) {
-      return
+    let countdown: string | number | NodeJS.Timeout | undefined;
+
+    if ((packageDetail?.paymentStatus as IPaymentStatus) === "PENDING") {
+      if (timeLeft <= 0) {
+        return;
+      }
+      countdown = setInterval(() => {
+        // console.log(timeLeft + " seconds remaining");
+        setTimeLeft((prev) => (prev - 1));
+      }, 1000);
     }
-    const countdown = setInterval(() => {
-      console.log(timeLeft + " seconds remaining");
-      setTimeLeft((prev) => prev -= 1)
-    }, 1000);
 
-    return () => clearInterval(countdown)
-  }, [timeLeft])
+    return () => clearInterval(countdown);
+  }, [timeLeft, packageDetail]);
 
   useEffect(() => {
-    const timeLeftInSeconds = getPaymentTimeLeftInSeconds(packageDetail?.expiredAt)
+    const timeLeftInSeconds = getPaymentTimeLeftInSeconds(
+      packageDetail?.expiredAt,
+    );
 
     if (timeLeftInSeconds >= 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTimeLeft(timeLeftInSeconds)
+      setTimeLeft(timeLeftInSeconds);
     }
-  }, [packageDetail])
-
-
+  }, [packageDetail]);
 
   return (
     <div className="w-full drop-shadow-2xl bg-white p-6 space-y-4">
@@ -46,7 +67,7 @@ const HistoryPaymentLogs = ({ packageDetail, onConfirmPayment }: HistoryPaymentL
         {getPaymentStatusText(paymentStatus?.toUpperCase() as IPaymentStatus)}
       </p>
       <div className="h-0.5 bg-tid-grey-100/10 w-full" />
-      {paymentStatus?.toUpperCase() as IPaymentStatus === 'PENDING' ? (
+      {(paymentStatus?.toUpperCase() as IPaymentStatus) === "PENDING" ? (
         <>
           <div className="space-y-0 font-semibold">
             <p>Total Payment</p>
@@ -55,7 +76,13 @@ const HistoryPaymentLogs = ({ packageDetail, onConfirmPayment }: HistoryPaymentL
             </p>
           </div>
           <div className="space-y-0 ">
-            <p className="font-semibold">Complete your payment within : <span className="text-tid-red-100 font-bold"> {getCountdownFormatFromSeconds(timeLeft)}</span></p>
+            <p className="font-semibold">
+              Complete your payment within :{" "}
+              <span className="text-tid-red-100 font-bold">
+                {" "}
+                {getCountdownFormatFromSeconds(timeLeft)}
+              </span>
+            </p>
             <p className="">
               Payment Due :{" "}
               <span className="text-tid-red-100 font-bold">
@@ -70,22 +97,28 @@ const HistoryPaymentLogs = ({ packageDetail, onConfirmPayment }: HistoryPaymentL
             </p>
             <div>
               <p className="text-tid-red-100 font-bold text-lg">
-                {packageDetail?.paymentDestinationAccount ? getChunkAccountNumber(packageDetail.paymentDestinationAccount) : ''}
+                {packageDetail?.paymentDestinationAccount
+                  ? getChunkAccountNumber(
+                      packageDetail.paymentDestinationAccount,
+                    )
+                  : ""}
               </p>
             </div>
             <p>{packageDetail?.paymentMethodName} - PT Tour ID Sejahtera</p>
           </div>
           <p className="text-tid-grey-200">
             After completing the payment, click{" "}
-            <span className="text-tid-red-100">“Confirm Payment” </span> to proceed.
+            <span className="text-tid-red-100">“Confirm Payment” </span> to
+            proceed.
           </p>
-          <Button onClick={() => {
-            onConfirmPayment({
-              referenceNumber: packageDetail?.referenceNumber,
-              orderTourPackageId: packageDetail?.orderTourPackageId
-            })
-
-          }}>
+          <Button
+            onClick={() => {
+              onConfirmPayment({
+                referenceNumber: packageDetail?.referenceNumber,
+                orderTourPackageId: packageDetail?.orderTourPackageId,
+              });
+            }}
+          >
             <p>Confirm Payment</p>
           </Button>
         </>
@@ -93,11 +126,15 @@ const HistoryPaymentLogs = ({ packageDetail, onConfirmPayment }: HistoryPaymentL
         <div className="space-y-5">
           {packageDetail?.transactionPaymentLogs?.map((log) => (
             <div key={log.paymentStatusLog}>
-              <p className="font-bold">{getPaymentStatusText(log.paymentStatusLog?.toUpperCase() as IPaymentStatus)}</p>
+              <p className="font-bold">
+                {getPaymentStatusText(
+                  log.paymentStatusLog?.toUpperCase() as IPaymentStatus,
+                )}
+              </p>
               <p>{getDateFormatFromDateWithTime(log?.createdAtLog)}</p>
             </div>
           ))}
-          <Button onClick={() => { }}>
+          <Button onClick={() => {}}>
             <p>Share This Activity</p>
           </Button>
         </div>
