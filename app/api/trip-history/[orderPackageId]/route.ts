@@ -20,6 +20,10 @@ export async function GET(
       },
     );
 
+    if(!res.ok && res.status === 401){
+        return NextResponse.json({ message: "You are unauthorized, go to login page?" }, { status: 401 });
+    }
+
     const result: ApiResponse<OrderPackageTourDetailResponseDTO> =
       await res.json();
 

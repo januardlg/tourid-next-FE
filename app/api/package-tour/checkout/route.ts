@@ -24,6 +24,11 @@ export async function POST(request: NextRequest) {
             }
         );
 
+
+        if(!res.ok && res.status === 401){
+            return NextResponse.json({ message: "You are unauthorized, go to login page?" }, { status: 401 });
+        }
+
         const result: ApiResponse<CreateOrderPackageTourResponseDTO> = await res?.json();
 
         if (!res.ok) {
