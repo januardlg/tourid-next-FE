@@ -4,9 +4,27 @@ import { useAppStore } from "@/providers/app-store-provider"
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react"
 import Button from "../button/button"
+import { initModalContent } from "@/stores/slices/modal-slice"
+import { cn } from "@/lib/utils"
 
 const ModalUI = () => {
-    const { isOpenModal, setIsOpenModal, modalContent } = useAppStore((state) => state)
+    const { isOpenModal, setIsOpenModal, modalContent, setModalContent } = useAppStore((state) => state)
+
+    const isHaveOkButton = modalContent?.okHanlde && modalContent.okText
+
+    const handleModalContentClose = () => {
+        setModalContent((prev) => {
+            return{
+                ...prev,
+                 title: '',
+                notes: '',
+                okText: '',
+                cancelText: 'Cancel',
+                cancelHandle: () => { },
+                okHanlde: () => { },
+            }
+        })
+    }
 
     return (
         <Dialog open={isOpenModal} onClose={setIsOpenModal} className="relative z-50">
@@ -21,12 +39,30 @@ const ModalUI = () => {
                     <p className="mt-2 text-tid-red-100 text-center">
                         {modalContent?.notes}
                     </p>
-                    <div className="mt-4 w-full flex justify-center ">
-                        <div className="w-fit">
-                            <Button variant="OUTLINE" onClick={() => {
+                    <div className="mt-4 w-full flex justify-center  space-x-3">
+                        {isHaveOkButton && (
+                            <div className="min-w-25">
+                                <Button variant="PRIMARY"
+                                    onClick={() => {
+                                        modalContent.okHanlde && modalContent?.okHanlde()
+                                        setIsOpenModal(false)
+                                        handleModalContentClose()
+                                    }}
+                                >
+                                    <p className="text-white">{modalContent?.okText ?? 'OK'}</p>
+                                </Button>
+                            </div>
+                        )}
+                        <div className="min-w-25">
+                            <Button variant={isHaveOkButton ? "OUTLINE":"PRIMARY"} onClick={() => {
                                 setIsOpenModal(false)
+                                modalContent?.cancelHandle && modalContent.cancelHandle()
+                                handleModalContentClose()
                             }}>
-                                <p className="text-tid-red-100">{modalContent?.cancelText ?? 'Cancel'}</p>
+                                <p className={cn(
+                                    isHaveOkButton && "text-tid-red-100",
+                                    !isHaveOkButton && "text-white"
+                                )}>{modalContent?.cancelText ?? 'Cancel'}</p>
                             </Button>
                         </div>
                     </div>

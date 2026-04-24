@@ -8,3 +8,14 @@ export const addOrderPackagePayloadSchema = z.object({
 });
 
 export type AddOrderPackagePayload = z.infer<typeof addOrderPackagePayloadSchema>
+
+
+export interface CreateOrderPackageTourResponseDTO {
+    orderTourPackageId: number,
+    tourPackageId: number,
+    paymentMethodId: number,
+    paymentStatus: string,
+    totalPayment: string,
+    referenceNumber: string,
+    expiredAt: Date
+}

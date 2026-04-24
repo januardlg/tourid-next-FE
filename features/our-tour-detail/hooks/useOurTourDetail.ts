@@ -1,35 +1,52 @@
 import { useState } from "react";
 
-import { IListOption } from "@/features/home/components/list-box";
-
+// zod and react-hook
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 
-import {
-  AddOrderPackagePayload,
-  addOrderPackagePayloadSchema,
-} from "../lib/our-tour-detail-schema";
-import { useQuery } from "@tanstack/react-query";
+// react query
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+// function request for bff
+import { checkoutPackageTour } from "../services/tour-checkout.client";
+
+// zustand
+import { useAppStore } from "@/providers/app-store-provider";
+
+// next
+import { useRouter } from "next/navigation";
+
+// libs, interface, and dtos
+import { ApiResponse } from "@/dtos/api-dto";
+import { AppError } from "@/lib/response-handler";
+import { getDateFormatFromDate } from "@/lib/utils";
+import { ITermConditionTour } from "../components/term-condition-tour";
 import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
 import {
   getPackageTourDetailClient,
   getPaymentMethodListClient,
 } from "../services/tour-detail.client";
-import { ITermConditionTour } from "../components/term-condition-tour";
+import {
+  AddOrderPackagePayload,
+  addOrderPackagePayloadSchema,
+  CreateOrderPackageTourResponseDTO,
+} from "../lib/our-tour-detail-schema";
+import { IListOption } from "@/features/home/components/list-box";
 
-const PaymentMethodOptions: IListOption[] = [
-  { id: "option", name: "Select Payment Method", disabled: true },
-  { id: 1, name: "BCA" },
-  { id: 2, name: "MANDIRI" },
-];
 
 export const useOurTourDetail = (tourId: string) => {
+  const router = useRouter();
+  const { setIsOpenModal, setModalContent, setIsOpenLoadingOverlay } =
+    useAppStore((store) => store);
+
+  // FETCH DETAIL
   const queryResultFetch = useQuery({
     queryKey: QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(tourId),
     queryFn: () => getPackageTourDetailClient(tourId),
     staleTime: 60_000,
   });
 
+  // FETCH PAYMENT METHOD
   const queryPaymentMethodList = useQuery({
     queryKey: QUERY_KEYS_CONSTANTS.common.paymentMethodList(),
     queryFn: () => {
@@ -38,8 +55,6 @@ export const useOurTourDetail = (tourId: string) => {
     },
     staleTime: 60_000,
   });
-
-  console.log("queryPaymentMethodList", queryPaymentMethodList?.data?.data);
 
   const numberOfGuestListOption: IListOption[] = Array.from([
     { id: "option", name: "Select Number Of Guest", disabled: true },
@@ -84,11 +99,7 @@ export const useOurTourDetail = (tourId: string) => {
     {
       title: "Duration",
       description: queryResultFetch?.data?.data
-        ? `${new Date(
-            queryResultFetch.data.data.starDate,
-          ).toLocaleDateString()} - ${new Date(
-            queryResultFetch.data.data.starDate,
-          ).toLocaleDateString()}`
+        ? `${getDateFormatFromDate(queryResultFetch.data.data.starDate)} - ${getDateFormatFromDate(queryResultFetch.data.data.endDate)}`
         : "",
     },
     {
@@ -105,11 +116,60 @@ export const useOurTourDetail = (tourId: string) => {
   );
 
   const initialAddOrderPackagePayload: AddOrderPackagePayload = {
-    tourPackageId: 2,
+    tourPackageId: parseInt(tourId),
     paymentMethodId: 0,
     numberOfGuests: 0,
     totalPayment: "0",
   };
+
+  // HANDLE CREATE ORDER
+  const mutation = useMutation({
+    mutationFn: async (payloadCheckoutPackageTour: AddOrderPackagePayload) => {
+      return await checkoutPackageTour(payloadCheckoutPackageTour);
+    },
+    onMutate: () => {
+      setIsOpenLoadingOverlay(true);
+    },
+    onSettled: () => {
+      setIsOpenLoadingOverlay(false);
+    },
+    onError: (error: AppError) => {
+      setIsOpenModal(true);
+      error?.status == 401
+        ? setModalContent({
+            title: "Error",
+            notes: error?.message,
+            okText: "Login Now",
+            okHanlde: () => {
+              router.push("/login");
+            },
+          })
+        : setModalContent({
+            title: "Error",
+            notes: error?.message,
+            cancelText: "I Understand",
+          });
+    },
+    onSuccess: (data: ApiResponse<CreateOrderPackageTourResponseDTO>) => {
+      console.log("onSuccess");
+
+      setIsOpenModal(true);
+
+      data.statusCode === 200
+        ? setModalContent({
+            title: "Success",
+            notes: data.message,
+            cancelText: "Go to Order Detail",
+            cancelHandle: () => {
+              router.push("/trip-history/" + data?.data?.orderTourPackageId);
+            },
+          })
+        : setModalContent({
+            title: "Failed ",
+            notes: data.message,
+          });
+    },
+  });
 
   const { control, handleSubmit, formState, setValue, getValues } =
     useForm<AddOrderPackagePayload>({
@@ -118,7 +178,8 @@ export const useOurTourDetail = (tourId: string) => {
     });
 
   const handleNumberOfGuest = (value: IListOption) => {
-    const totalPayment = Number(value.name) * 40000;
+    const totalPayment =
+      Number(value.name) * Number(queryResultFetch?.data?.data?.cost);
     setNumberOfGuest(value);
     setValue("totalPayment", totalPayment.toString());
   };
@@ -127,10 +188,10 @@ export const useOurTourDetail = (tourId: string) => {
     setPaymentMethod(value);
   };
 
-  const onSubmit: SubmitHandler<AddOrderPackagePayload> = (
+  const onSubmit: SubmitHandler<AddOrderPackagePayload> = async (
     data: AddOrderPackagePayload,
   ) => {
-    console.log("data", data);
+    mutation.mutate(data);
   };
 
   const onError: SubmitErrorHandler<AddOrderPackagePayload> = (errors) => {
@@ -156,5 +217,6 @@ export const useOurTourDetail = (tourId: string) => {
     handleSubmit,
     onSubmit,
     onError,
+    mutation,
   };
 };

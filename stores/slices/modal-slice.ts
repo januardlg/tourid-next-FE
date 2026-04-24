@@ -10,6 +10,14 @@ export interface IModalContent {
     cancelHandle?: () => void
 }
 
+export const initModalContent: IModalContent = {
+    title: '',
+    notes: '',
+    okText: '',
+    cancelText: 'Cancel',
+    cancelHandle: () => { },
+    okHanlde: () => { },
+}
 
 export type ModalState = {
     isOpenModal: boolean

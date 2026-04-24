@@ -69,11 +69,11 @@ const useTripHistory = () => {
     categoryOptionsList[0],
   );
 
-
   const handleClickSearch = () => {
     setQueryParamsState((prev) => {
       return {
         ...prev,
+        page: '1',
         filterValue: selectedCategory.id as string,
         sortBy:
           sortingBy.id === ""
@@ -83,6 +83,15 @@ const useTripHistory = () => {
       }
     })
     setActivePage(1)
+  }
+
+  const handleChangePage = (selectedPage: number) => {
+    setQueryParamsState((prev) => {
+      return {
+        ...prev,
+        page: selectedPage.toString()
+      }
+    })
   }
 
   useEffect(() => {
@@ -104,7 +113,8 @@ const useTripHistory = () => {
     setSortingBy,
     setSortingValue,
     setSelectedCategory,
-    handleClickSearch
+    handleChangePage,
+    handleClickSearch,
   };
 };
 

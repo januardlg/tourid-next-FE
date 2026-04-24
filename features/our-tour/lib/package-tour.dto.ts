@@ -28,7 +28,7 @@ export interface PackageTourProductDTO {
     activities: IActivity[],
     hostelryPartnerId: number,
     quota: number,
-    quotaRemaining?:number;
+    quotaRemaining?: number;
     hostelryPartnerName?: string;
     hostelryPartnerLocation?: string;
     hostelryAddress?: string;
@@ -40,6 +40,7 @@ export interface MetaDataPackageTourDTO {
     page: number;
     limit: number;
     totalPages: number;
+    totalData: number;
     sortBy: string;
     order: "asc" | "desc";
     filterBy: string;

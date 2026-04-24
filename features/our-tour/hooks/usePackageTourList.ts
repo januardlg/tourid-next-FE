@@ -62,6 +62,15 @@ export const usePackageTourList = () => {
   // FUNCTION FOR PAGINATION
   const [activePage, setActivePage] = useState<number>(parseInt(initialParamsPackageTour.page))
 
+  const handleChangePage = (selectedPage: number) => {
+    setQueryParamsState((prev) => {
+      return {
+        ...prev,
+        page: selectedPage.toString()
+      }
+    })
+  }
+
   const handleClickSearch = () => {
     console.log("handleClickSearch");
     setQueryParamsState((prev: PackageTourQueryDTO) => {
@@ -105,6 +114,7 @@ export const usePackageTourList = () => {
     setSortingBy,
     setSortingValue,
     setActivePage,
+    handleChangePage,
 
     handleClickSearch,
   };

@@ -1,0 +1,8 @@
+{
+    "editor.inlineSuggest.syntaxHighlightingEnabled": true,
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.chat.alternateGptPrompt.enabled": false,
+    "chat.disableAIFeatures": true,
+    "chat.useAgentSkills": true,
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true
+}
