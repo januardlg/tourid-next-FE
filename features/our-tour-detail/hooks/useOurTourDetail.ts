@@ -1,84 +1,222 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import { IListOption } from "@/features/home/components/list-box"
+// zod and react-hook
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
+// react query
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { AddOrderPackagePayload, addOrderPackagePayloadSchema } from "../lib/our-tour-detail-schema"
+// function request for bff
+import { checkoutPackageTour } from "../services/tour-checkout.client";
 
+// zustand
+import { useAppStore } from "@/providers/app-store-provider";
 
-const NumberOfGuestOption: IListOption[] = [
-    { id: 'option', name: 'Select Number Of Guest', disabled: true },
-    { id: 1, name: 1 },
-    { id: 2, name: 2 }
-]
+// next
+import { useRouter } from "next/navigation";
 
-const PaymentMethodOptions: IListOption[] = [
-    { id: 'option', name: 'Select Payment Method', disabled: true },
-    { id: 1, name: "BCA" },
-    { id: 2, name: "MANDIRI" }
-]
-
-export const useOurTourDetail = () => {
-
-    const numberOfGuestListOption = NumberOfGuestOption
-    const [paymentMethodOptions, setPaymentMethodOptions] = useState<IListOption[]>(PaymentMethodOptions)
-
-
-    const [numberOfGuest, setNumberOfGuest] = useState(NumberOfGuestOption[0])
-    const [paymentMethod, setPaymentMethod] = useState(PaymentMethodOptions[0])
-
-
-    const initialAddOrderPackagePayload: AddOrderPackagePayload = {
-        tourPackageId: 2,
-        paymentMethodId: 0,
-        numberOfGuests: 0,
-        totalPayment: '0'
-    }
+// libs, interface, and dtos
+import { ApiResponse } from "@/dtos/api-dto";
+import { AppError } from "@/lib/response-handler";
+import { getDateFormatFromDate } from "@/lib/utils";
+import { ITermConditionTour } from "../components/term-condition-tour";
+import { QUERY_KEYS_CONSTANTS } from "@/lib/constants/query-key";
+import {
+  getPackageTourDetailClient,
+  getPaymentMethodListClient,
+} from "../services/tour-detail.client";
+import {
+  AddOrderPackagePayload,
+  addOrderPackagePayloadSchema,
+  CreateOrderPackageTourResponseDTO,
+} from "../lib/our-tour-detail-schema";
+import { IListOption } from "@/features/home/components/list-box";
 
 
-    const { control, handleSubmit, formState, setValue, getValues } = useForm<AddOrderPackagePayload>({
-        resolver: zodResolver(addOrderPackagePayloadSchema),
-        defaultValues: initialAddOrderPackagePayload
-    })
+export const useOurTourDetail = (tourId: string) => {
+  const router = useRouter();
+  const { setIsOpenModal, setModalContent, setIsOpenLoadingOverlay } =
+    useAppStore((store) => store);
 
-    const handleNumberOfGuest = (value: IListOption) => {
-        const totalPayment = Number(value.name) * 40000
-        setNumberOfGuest(value)
-        setValue('totalPayment', totalPayment.toString())
-    }
+  // FETCH DETAIL
+  const queryResultFetch = useQuery({
+    queryKey: QUERY_KEYS_CONSTANTS.ourTour.packageTourDetail(tourId),
+    queryFn: () => getPackageTourDetailClient(tourId),
+    staleTime: 60_000,
+  });
 
-    const handleSelectPaymentMethod = (value: IListOption) => {
-        setPaymentMethod(value)
-    }
+  // FETCH PAYMENT METHOD
+  const queryPaymentMethodList = useQuery({
+    queryKey: QUERY_KEYS_CONSTANTS.common.paymentMethodList(),
+    queryFn: () => {
+      // console.log("HIT API PAYMENT METHOD CLIENT")
+      return getPaymentMethodListClient();
+    },
+    staleTime: 60_000,
+  });
 
-    const onSubmit: SubmitHandler<AddOrderPackagePayload> = (data: AddOrderPackagePayload) => {
-        console.log("data", data)
-    }
+  const numberOfGuestListOption: IListOption[] = Array.from([
+    { id: "option", name: "Select Number Of Guest", disabled: true },
+    ...Array.from(
+      { length: queryResultFetch?.data?.data?.quotaRemaining ?? 0 },
+      (_, index) => ({ id: index + 1, name: index + 1 }),
+    ),
+  ]);
 
-    const onError: SubmitErrorHandler<AddOrderPackagePayload> = (errors) => {
-        console.log("Form Submission Errors:", errors);
-    };
+  const converterPaymentMethod = queryPaymentMethodList?.data?.data?.map(
+    (paymentMethod) => {
+      return {
+        id: paymentMethod.paymentMethodsId,
+        name: paymentMethod.name,
+        disabled: !paymentMethod.isActive,
+      };
+    },
+  );
 
+  const paymentMethodListOptions: IListOption[] = [
+    { id: "option", name: "Select Payment Method", disabled: true },
+    ...(converterPaymentMethod as IListOption[]),
+  ];
 
-    return {
-        numberOfGuestListOption,
-        paymentMethodOptions,
+  const TERM_CONDITIONS: ITermConditionTour[] = [
+    {
+      title: "Free Cancelation",
+      description: "Cancel up to 24 hours in advance to receive a full refund",
+    },
+    {
+      title: "Health precautions",
+      description: "Special health and safety measures apply. Learn more",
+    },
+    {
+      title: "Mobile ticketing",
+      description: "Use your phone or print your voucher",
+    },
+    {
+      title: "Health precautions3",
+      description: "Special health and safety measures apply. Learn more",
+    },
+    {
+      title: "Duration",
+      description: queryResultFetch?.data?.data
+        ? `${getDateFormatFromDate(queryResultFetch.data.data.starDate)} - ${getDateFormatFromDate(queryResultFetch.data.data.endDate)}`
+        : "",
+    },
+    {
+      title: "Instant confirmation",
+      description: "Don’t wait for the confirmation!",
+    },
+  ];
 
-        numberOfGuest,
-        handleNumberOfGuest,
+  const [numberOfGuest, setNumberOfGuest] = useState(
+    numberOfGuestListOption[0],
+  );
+  const [paymentMethod, setPaymentMethod] = useState(
+    paymentMethodListOptions[0],
+  );
 
-        paymentMethod,
-        handleSelectPaymentMethod,
+  const initialAddOrderPackagePayload: AddOrderPackagePayload = {
+    tourPackageId: parseInt(tourId),
+    paymentMethodId: 0,
+    numberOfGuests: 0,
+    totalPayment: "0",
+  };
 
-        control,
-        formState,
-        setValue,
-        getValues,
-        handleSubmit,
-        onSubmit,
-        onError
+  // HANDLE CREATE ORDER
+  const mutation = useMutation({
+    mutationFn: async (payloadCheckoutPackageTour: AddOrderPackagePayload) => {
+      return await checkoutPackageTour(payloadCheckoutPackageTour);
+    },
+    onMutate: () => {
+      setIsOpenLoadingOverlay(true);
+    },
+    onSettled: () => {
+      setIsOpenLoadingOverlay(false);
+    },
+    onError: (error: AppError) => {
+      setIsOpenModal(true);
+      error?.status == 401
+        ? setModalContent({
+            title: "Error",
+            notes: error?.message,
+            okText: "Login Now",
+            okHanlde: () => {
+              router.push("/login");
+            },
+          })
+        : setModalContent({
+            title: "Error",
+            notes: error?.message,
+            cancelText: "I Understand",
+          });
+    },
+    onSuccess: (data: ApiResponse<CreateOrderPackageTourResponseDTO>) => {
+      console.log("onSuccess");
 
-    }
-}
+      setIsOpenModal(true);
+
+      data.statusCode === 200
+        ? setModalContent({
+            title: "Success",
+            notes: data.message,
+            cancelText: "Go to Order Detail",
+            cancelHandle: () => {
+              router.push("/trip-history/" + data?.data?.orderTourPackageId);
+            },
+          })
+        : setModalContent({
+            title: "Failed ",
+            notes: data.message,
+          });
+    },
+  });
+
+  const { control, handleSubmit, formState, setValue, getValues } =
+    useForm<AddOrderPackagePayload>({
+      resolver: zodResolver(addOrderPackagePayloadSchema),
+      defaultValues: initialAddOrderPackagePayload,
+    });
+
+  const handleNumberOfGuest = (value: IListOption) => {
+    const totalPayment =
+      Number(value.name) * Number(queryResultFetch?.data?.data?.cost);
+    setNumberOfGuest(value);
+    setValue("totalPayment", totalPayment.toString());
+  };
+
+  const handleSelectPaymentMethod = (value: IListOption) => {
+    setPaymentMethod(value);
+  };
+
+  const onSubmit: SubmitHandler<AddOrderPackagePayload> = async (
+    data: AddOrderPackagePayload,
+  ) => {
+    mutation.mutate(data);
+  };
+
+  const onError: SubmitErrorHandler<AddOrderPackagePayload> = (errors) => {
+    console.log("Form Submission Errors:", errors);
+  };
+
+  return {
+    numberOfGuestListOption,
+    paymentMethodListOptions,
+
+    numberOfGuest,
+    paymentMethod,
+    control,
+    formState,
+    TERM_CONDITIONS,
+    queryResultFetch,
+    queryPaymentMethodList,
+
+    handleNumberOfGuest,
+    handleSelectPaymentMethod,
+    setValue,
+    getValues,
+    handleSubmit,
+    onSubmit,
+    onError,
+    mutation,
+  };
+};

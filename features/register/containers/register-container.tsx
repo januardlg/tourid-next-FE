@@ -96,15 +96,21 @@ const RegisterContainer = () => {
                 </div>
 
                 <div className="flex justify-center space-x-4">
-                    <Button variant="OUTLINE" onClick={() => { }}>
-                        <Image src={`/icons/google-icon.png`} alt="google" width={16} height={16} />
-                    </Button>
-                    <Button variant="OUTLINE" onClick={() => { }}>
-                        <Image src={`/icons/facebook-icon.png`} alt="facebook" width={16} height={16} />
-                    </Button>
-                    <Button variant="OUTLINE" onClick={() => { }}>
-                        <Image src={`/icons/apple-icon.png`} alt="apple" width={16} height={16} />
-                    </Button>
+                    <div className="w-fit">
+                        <Button variant="OUTLINE" onClick={() => { }}>
+                            <Image src={`/icons/google-icon.png`} alt="google" width={16} height={16} />
+                        </Button>
+                    </div>
+                    <div className="w-fit">
+                        <Button variant="OUTLINE" onClick={() => { }}>
+                            <Image src={`/icons/facebook-icon.png`} alt="facebook" width={16} height={16} />
+                        </Button>
+                    </div>
+                    <div className="w-fit">
+                        <Button variant="OUTLINE" onClick={() => { }}>
+                            <Image src={`/icons/apple-icon.png`} alt="apple" width={16} height={16} />
+                        </Button>
+                    </div>
                 </div>
 
                 <p className="text-center text-tid-grey-100 text-sm">Already have an account? <span><Link href={'/login'} className="text-tid-red-100"> Login</Link></span> </p>

@@ -20,7 +20,7 @@ const SubscribeFormInput = () => {
           value={email}
         />
       </div>
-      <Button type="PRIMARY" onClick={() => {}}>
+      <Button variant="PRIMARY" onClick={() => {}}>
         Subscribe
       </Button>
     </div>

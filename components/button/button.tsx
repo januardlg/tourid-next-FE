@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils"
 
 export interface IButton {
@@ -8,9 +9,13 @@ export interface IButton {
 
 const Button = ({ variant = 'PRIMARY', children, onClick }: IButton) => {
     return (
-        <button onClick={onClick}
+        <button onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            onClick(e)
+        }}
             className={cn(
-                'py-3 px-4 text-white rounded-lg w-full',
+                'py-3 px-4 text-white rounded-lg w-full cursor-pointer',
                 { 'bg-tid-red-100': variant === 'PRIMARY' },
                 { 'border border-tid-red-100 text-tid-red-100': variant === 'OUTLINE' }
             )}

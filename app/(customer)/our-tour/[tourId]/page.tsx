@@ -1,12 +1,12 @@
 import OurTourDetailContainer from "@/features/our-tour-detail/containers/our-tour-detail-container"
 
 
-const Page = async ({ params }: { params: Promise<{ tripId: string }> }) => {
+const Page = async ({ params }: { params: Promise<{ tourId: string }> }) => {
 
-    const { tripId } = await params
+    const { tourId } = await params
 
     return (
-        <OurTourDetailContainer />
+        <OurTourDetailContainer tourId={tourId} />
     )
 }
 

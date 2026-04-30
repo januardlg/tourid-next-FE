@@ -1,35 +1,54 @@
 "use client"
 import Image from "next/image"
 
+// components
 import CalendarIcon from "@/components/icons/calendar-icon"
 import ClockIcon from "@/components/icons/clock-icon"
 
-const HistoryCard = () => {
+// utils
+import dayjs from "dayjs"
+import { OrderPackageResponseDTO } from "../lib/trip-history"
+import { getDateFormatFromDate, getDurationDate, getRupiahCurrencyFormat } from "@/lib/utils"
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import { PAYMENT_STATUS } from "../lib/constants"
+import { useRouter } from 'next/navigation'
+dayjs.extend(localizedFormat)
+interface HistoryCardProps {
+    historyData: OrderPackageResponseDTO
+}
+
+const HistoryCard = ({ historyData }: HistoryCardProps) => {
+    const router = useRouter()
+
     return (
-        <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200">
+        <div className="w-full rounded-xl shadow-lg border border-tid-grey-400 p-5 grid grid-cols-12 gap-5 text-tid-grey-200 cursor-pointer"
+            onClick={() => {
+                router.push('/trip-history/' + historyData.orderTourPackageId)
+            }}
+        >
             <div className="col-span-3">
                 <Image src={`/images/step-content.png`} alt="content" width={200} height={200} className="w-full h-full rounded-xl" />
             </div>
             <div className="col-span-6  ">
-                <p className="text-lg font-semibold  text-black">Trip To Greece</p>
+                <p className="text-lg font-semibold  text-black">{historyData.packageTourName}</p>
                 <div className="flex-align-items-center space-x-1.5 mt-2.5">
                     <CalendarIcon />
-                    <p>10/12/2021</p>
+                    <p>{getDateFormatFromDate(historyData.packageTourStartDate)}</p>
                 </div>
                 <div className="flex-align-items-center space-x-1.5">
                     <ClockIcon />
-                    <p> 2 days trip</p>
+                    <p> {getDurationDate(historyData.packageTourEndDate, historyData.packageTourStartDate)} days trip</p>
                 </div>
                 <p className="mt-5 text-sm font-semibold">Accomodation Address</p>
-                <p className="">Horas Hotel </p>
-                <p className="text-sm">Jl Sudirman No 12 Kota Pematangsiantar <span><a className="text-blue-600" rel="noopener noreferrer" href={'https://google.com/maps/place/hotel+indonesia/data=!4m2!3m1!1s0x2e69f421963cd607:0x503cb9e9306e657a?sa=X&ved=1t:242&ictx=111'} target="_blank">View on map</a></span></p>
+                <p className="">{historyData.hostelryName} </p>
+                <p className="text-sm">{historyData.hostelryAddress} <span><a className="text-blue-600" rel="noopener noreferrer" href={historyData.hostelryLocation} target="_blank">View on map</a></span></p>
 
             </div>
             <div className="col-span-3">
                 <p className="text-sm font-semibold">Total Payment</p>
-                <p className="text-2xl text-tid-red-100 font-black mt-1">Rp 350.000 </p>
-                <p className="mt-5 text-sm font-semibold">Payment Date</p>
-                <p className="mt-1">10/12/2021 10:30 am</p>
+                <p className="text-2xl text-tid-red-100 font-black mt-1">{getRupiahCurrencyFormat(historyData.totalPayment)} </p>
+                <p className="mt-5 text-sm font-semibold">Payment Status</p>
+                <p className="mt-1 font-semibold">{historyData.paymentStatus ? PAYMENT_STATUS[historyData.paymentStatus as keyof typeof PAYMENT_STATUS] : ''}</p>
             </div>
         </div >
     )

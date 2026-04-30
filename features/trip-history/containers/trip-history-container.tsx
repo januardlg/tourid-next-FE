@@ -1,38 +1,87 @@
-import Pagination from "@/features/our-tour/components/pagination"
-import FilterStatus from "../components/filter-status"
-import HistoryCard from "../components/history-card"
-import SortCategory from "../components/sort-category"
+"use client";
+import SelectWithSorting from "@/components/input/select/select-with-sorting";
+// import Pagination from "@/components/pagination/pagination";
+import HistoryCard from "../components/history-card";
+import SelectCategory from "@/components/input/select/select-category";
+
+import useTripHistory from "../hook/useTripHistory";
+import Button from "@/components/button/button";
+import Pagination from "@/components/pagination/pagination";
 
 const TripHistoryContainer = () => {
+  const {
+    queryResultFetch,
 
-    return (
-        <section className="mt-12">
-            <div className="grid grid-cols-12 gap-9 ">
-                <div className="col-span-4">
-                    <p className="text-2xl font-bold">Explore Our Tour</p>
-                    <p>23 Activities Found</p>
-                </div>
-                <div className="col-span-4">
-                    <FilterStatus />
-                </div>
-                <div className="col-span-4">
-                    <SortCategory />
-                </div>
-            </div>
+    sortingByOptions,
 
-            <div className="mt-12">
-                <div className="space-y-6">
+    sortingBy,
+    sortingValue,
+    categoryOptionsList,
+    selectedCategory,
+    totalPages,
+    activePage,
 
-                    <HistoryCard />
+    setSortingBy,
+    setSortingValue,
+    setSelectedCategory,
+    setActivePage,
+    handleChangePage,
+    handleClickSearch
+  } = useTripHistory();
 
-                </div>
-            </div>
+  const tripHistoryListData = queryResultFetch.data?.data || [];
 
-            <div className="mt-20">
-                <Pagination />
-            </div>
-        </section>
-    )
-}
+  return (
+    <section className="mt-12">
+      <div className="grid grid-cols-12 gap-3 ">
+        <div className="col-span-3">
+          <p className="text-2xl font-bold">Explore Our Tour</p>
+          <p>{queryResultFetch.data?.meta?.totalData} Activities Found</p>
+        </div>
+        <div className="col-span-4">
+          <SelectCategory
+            categoryOptionsList={categoryOptionsList}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        </div>
+        <div className="col-span-3">
+          <SelectWithSorting
+            sortingByOptions={sortingByOptions}
+            sortingBy={sortingBy}
+            sortingValue={sortingValue}
+            setSortingBy={setSortingBy}
+            setSortingValue={setSortingValue}
+          />
+        </div>
+        <div className="col-span-2">
+          <Button onClick={handleClickSearch}>
+            <p>Search</p>
+          </Button>
+        </div>
+      </div>
 
-export default TripHistoryContainer
+      <div className="mt-12">
+        <div className="space-y-6">
+          {tripHistoryListData.map((tripHistory) => (
+            <HistoryCard
+              key={tripHistory.orderTourPackageId}
+              historyData={tripHistory}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-20">
+        <Pagination
+          totalPages={totalPages}
+          activePage={activePage}
+          setActivePage={setActivePage}
+          onChangePage={handleChangePage}
+        />
+      </div>
+    </section>
+  );
+};
+
+export default TripHistoryContainer;
