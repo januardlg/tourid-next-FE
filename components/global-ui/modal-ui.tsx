@@ -12,20 +12,6 @@ const ModalUI = () => {
 
     const isHaveOkButton = modalContent?.okHanlde && modalContent.okText
 
-    const handleModalContentClose = () => {
-        setModalContent((prev) => {
-            return{
-                ...prev,
-                 title: '',
-                notes: '',
-                okText: '',
-                cancelText: 'Cancel',
-                cancelHandle: () => { },
-                okHanlde: () => { },
-            }
-        })
-    }
-
     return (
         <Dialog open={isOpenModal} onClose={setIsOpenModal} className="relative z-50">
             <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-tid-grey-200/40 ">
@@ -46,7 +32,7 @@ const ModalUI = () => {
                                     onClick={() => {
                                         modalContent.okHanlde && modalContent?.okHanlde()
                                         setIsOpenModal(false)
-                                        handleModalContentClose()
+                                        setModalContent(initModalContent)
                                     }}
                                 >
                                     <p className="text-white">{modalContent?.okText ?? 'OK'}</p>
@@ -54,10 +40,10 @@ const ModalUI = () => {
                             </div>
                         )}
                         <div className="min-w-25">
-                            <Button variant={isHaveOkButton ? "OUTLINE":"PRIMARY"} onClick={() => {
+                            <Button variant={isHaveOkButton ? "OUTLINE" : "PRIMARY"} onClick={() => {
                                 setIsOpenModal(false)
                                 modalContent?.cancelHandle && modalContent.cancelHandle()
-                                handleModalContentClose()
+                                setModalContent(initModalContent)
                             }}>
                                 <p className={cn(
                                     isHaveOkButton && "text-tid-red-100",

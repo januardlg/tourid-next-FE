@@ -55,7 +55,7 @@ const OurTourManagementContainer = () => {
                     </table>
                 </section>
                 <section>
-                    <Pagination />
+                    {/* <Pagination /> */}
                 </section>
             </section>
         </section>
