@@ -10,7 +10,7 @@ const SubscribeForm = () => {
           <div className="px-30">
             <p className="text-center text-2xl text-tid-grey-200 font-semibold">
               Subscribe to get information, latest news and other interesting
-              offers about TourID
+              offers <br /> about TourID
             </p>
           </div>
           <div>
