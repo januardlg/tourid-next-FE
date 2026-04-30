@@ -2,6 +2,7 @@
 import { useState } from "react";
 import FormInput from "@/components/input/form-input";
 import Button from "@/components/button/button";
+import { cn } from "@/lib/utils";
 
 const SubscribeFormInput = () => {
   const [email, setEmail] = useState("");
@@ -11,18 +12,18 @@ const SubscribeFormInput = () => {
   };
 
   return (
-    <div className="flex justify-center items-center gap-4 mt-10">
+    <div className="flex justify-center items-center mt-10 gap-x-4">
       <div className="w-fit">
-        <FormInput
-          name="email"
-          placeholder="Your Email"
-          onChange={handleChange}
-          value={email}
-        />
+        <input className={cn(
+          "w-full px-4 py-3 border border-tid-red-100 rounded-lg",
+          "focus:outline-tid-red-100 focus:outline-1"
+        )} type="text" name={email} value={email} placeholder={'Your Email'} onChange={handleChange} />
       </div>
-      <Button variant="PRIMARY" onClick={() => {}}>
-        Subscribe
-      </Button>
+      <div className="w-fit ">
+        <Button variant="PRIMARY" onClick={() => { }}>
+          Subscribe
+        </Button>
+      </div>
     </div>
   );
 };

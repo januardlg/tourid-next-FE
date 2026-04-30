@@ -5,9 +5,13 @@ import { getUserDataFromJWT } from './lib/auth-utils';
 
 export async function proxy(request: NextRequest) {
 
+    if (request.nextUrl.pathname === '/') {
+        return NextResponse.redirect(new URL('/home', request.url))
+    }
+
     const res = NextResponse.next()
 
-    res.headers.append('Access-Control-Allow-Origin', 'http://localhost:3000/')
+    // res.headers.append('Access-Control-Allow-Origin', 'http://localhost:3000/')
     res.headers.append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     res.headers.append('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 
@@ -26,9 +30,10 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL('/home', request.url));
     }
 
-    if (!token && (pathname.startsWith('/trip-history') || pathname.startsWith('/dashboard'))) {
+    if (!dataToken && (pathname.startsWith('/trip-history') || pathname.startsWith('/dashboard'))) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
+
 
     return res
 }
