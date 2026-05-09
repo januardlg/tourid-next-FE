@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "dotenv -f .env.development -- next dev",
+    "build": "dotenv -f .env.development -- next build",
+    "start": "dotenv -f .env.development -- next start",
     "lint": "eslint",
     "create-feature": "node create-feature.js"
   },
@@ -30,6 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "dayjs": "^1.11.19",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
