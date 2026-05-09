@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Frontend Service (Next.js)
+  tourid_fe:
+    # 1. Build Next.js app image from Dockerfile
+    build: .
+    # 2. Create image name
+    image: tourid_fe_images
+    # 3. Create container name
+    container_name: tourid_fe_container
+    # 4. Map host port 8080 to container port 8080
+    ports:
+      - "8080:8080"
+    # 5. Load all variables from .env.development file
+    env_file:
+      - .env.development
+      # 6. Override or add environment variables
+      # environment:
+      # - NODE_ENV=development
+      # - NEXT_PUBLIC_API_URL=http://localhost:3000  # Point to local backend
+      # 7. Restart policy
+
+    restart: unless-stopped
+    # 8. Development-specific settings
+    stdin_open: true
+    tty: true
+    # 9. Health check
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
