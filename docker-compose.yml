@@ -15,12 +15,11 @@ services:
     # 5. Load all variables from .env.development file
     env_file:
       - .env.development
-      # 6. Override or add environment variables
+    # 6. Override or add environment variables
       # environment:
       # - NODE_ENV=development
       # - NEXT_PUBLIC_API_URL=http://localhost:3000  # Point to local backend
-      # 7. Restart policy
-
+    # 7. Restart policy
     restart: unless-stopped
     # 8. Development-specific settings
     stdin_open: true
