@@ -51,6 +51,25 @@ export const getDurationDate = (endDate: Date, startDate: Date) => {
 };
 
 
+// Returns an absolute http(s) URL, or undefined so relative values never resolve against localhost
+export const getExternalUrl = (url?: string | null) => {
+  const trimmed = url?.trim();
+  if (!trimmed) return undefined;
+
+  const candidate = /^[a-z][a-z\d+.-]*:/i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed.replace(/^\/+/, "")}`;
+
+  try {
+    const parsed = new URL(candidate);
+    return parsed.protocol === "http:" || parsed.protocol === "https:"
+      ? parsed.href
+      : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 export const getPaymentStatusText = (status: IPaymentStatus) => {
 
   const statusText = PAYMENT_STATUS[status]

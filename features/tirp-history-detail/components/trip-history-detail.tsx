@@ -20,7 +20,8 @@ interface TripHistoryDetailProps {
 }
 
 const TripHistoryDetail = ({ orderPackageId }: TripHistoryDetailProps) => {
-  const { TERM_CONDITIONS, queryResult, handleConfirmPayment } = useTripHistoryDetail(orderPackageId);
+  const { TERM_CONDITIONS, queryResult, handleConfirmPayment } =
+    useTripHistoryDetail(orderPackageId);
 
   const data = queryResult?.data?.data;
 
@@ -30,7 +31,7 @@ const TripHistoryDetail = ({ orderPackageId }: TripHistoryDetailProps) => {
       <section className="grid grid-cols-12 gap-6 mt-4">
         <div className="h-full col-span-6">
           <Image
-            src={"/images/step-content.png"}
+            src={"/images/tours/sumbawa.webp"}
             alt="image"
             width={2000}
             height={2000}

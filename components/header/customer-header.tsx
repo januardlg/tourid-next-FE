@@ -46,7 +46,7 @@ const CustomerHeader = ({ dataUser }: { dataUser: IUserData | undefined }) => {
   };
 
   return (
-    <header className="grid grid-cols-12">
+    <header className="fixed left-[8.333333%] top-10 z-50 grid w-10/12 grid-cols-12 bg-transparent">
       <div className="col-span-6">
         <Link href={"/home"}>
           <Image

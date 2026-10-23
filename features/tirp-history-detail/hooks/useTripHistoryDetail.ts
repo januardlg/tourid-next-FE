@@ -21,7 +21,6 @@ import {
   ConfirmPaymentResponseDTO,
 } from "@/features/trip-history/lib/trip-history";
 
-
 export const useTripHistoryDetail = (orderPackageId: string) => {
   const router = useRouter();
   const { setIsOpenModal, setModalContent, setIsOpenLoadingOverlay } =
@@ -48,7 +47,7 @@ export const useTripHistoryDetail = (orderPackageId: string) => {
       description: "Use your phone or print your voucher",
     },
     {
-      title: "Health precautions3",
+      title: "Health precautions",
       description: "Special health and safety measures apply. Learn more",
     },
     {
