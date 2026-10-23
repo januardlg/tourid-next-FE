@@ -1,8 +1,11 @@
-import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
+import { useState } from "react"
+import { useForm, type SubmitErrorHandler, type SubmitHandler } from "react-hook-form"
 import { FormRegisterValue, registerUserValidationSchema } from "../lib/register.valid-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 export const useRegister = () => {
+    const [isValidationSuccessful, setIsValidationSuccessful] = useState(false)
+
     const initialValueFormRegister = {
         username: '',
         email: '',
@@ -21,6 +24,7 @@ export const useRegister = () => {
 
     const onSubmit: SubmitHandler<FormRegisterValue> = (data: FormRegisterValue) => {
         console.log("data", data)
+        setIsValidationSuccessful(true)
     }
 
     const onError: SubmitErrorHandler<FormRegisterValue> = (errors) => {
@@ -34,6 +38,7 @@ export const useRegister = () => {
 
         handleSubmit,
         onSubmit,
-        onError
+        onError,
+        isValidationSuccessful
     }
 }

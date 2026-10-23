@@ -33,7 +33,6 @@ import {
 } from "../lib/our-tour-detail-schema";
 import { IListOption } from "@/features/home/components/list-box";
 
-
 export const useOurTourDetail = (tourId: string) => {
   const router = useRouter();
   const { setIsOpenModal, setModalContent, setIsOpenLoadingOverlay } =
@@ -93,7 +92,7 @@ export const useOurTourDetail = (tourId: string) => {
       description: "Use your phone or print your voucher",
     },
     {
-      title: "Health precautions3",
+      title: "Health precautions",
       description: "Special health and safety measures apply. Learn more",
     },
     {

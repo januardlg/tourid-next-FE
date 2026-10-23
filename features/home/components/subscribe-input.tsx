@@ -12,15 +12,22 @@ const SubscribeFormInput = () => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-10 gap-x-4">
-      <div className="w-fit">
-        <input className={cn(
-          "w-full px-4 py-3 border border-tid-red-100 rounded-lg",
-          "focus:outline-tid-red-100 focus:outline-1"
-        )} type="text" name={email} value={email} placeholder={'Your Email'} onChange={handleChange} />
+    <div className="flex justify-center items-center mt-10 gap-x-4 px-10">
+      <div className="w-[50%]">
+        <input
+          className={cn(
+            "w-full px-4 py-3 border border-tid-red-100 rounded-lg bg-white",
+            "focus:outline-tid-red-100 focus:outline-1",
+          )}
+          type="text"
+          name={email}
+          value={email}
+          placeholder={"Your Email"}
+          onChange={handleChange}
+        />
       </div>
       <div className="w-fit ">
-        <Button variant="PRIMARY" onClick={() => { }}>
+        <Button variant="PRIMARY" onClick={() => {}}>
           Subscribe
         </Button>
       </div>

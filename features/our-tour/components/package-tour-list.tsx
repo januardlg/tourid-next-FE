@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import Pagination from "../../../components/pagination/pagination";
 import ProductCard from "./product-card";
 
@@ -28,7 +29,7 @@ const PackageTourList = () => {
     setSortingValue,
     handleChangePage,
 
-    handleClickSearch
+    handleClickSearch,
   } = usePackageTourList();
 
   return (
@@ -77,7 +78,12 @@ const PackageTourList = () => {
             ))}
           </div>
         </div>
-        <div className="col-span-12">
+        <div
+          className={cn(
+            "col-span-12",
+            totalPages > 1 ? "opacity-100" : "opacity-0",
+          )}
+        >
           <Pagination
             totalPages={totalPages}
             activePage={activePage}
