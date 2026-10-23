@@ -7,6 +7,7 @@ import SelectCategory from "@/components/input/select/select-category";
 import useTripHistory from "../hook/useTripHistory";
 import Button from "@/components/button/button";
 import Pagination from "@/components/pagination/pagination";
+import { cn } from "@/lib/utils";
 
 const TripHistoryContainer = () => {
   const {
@@ -26,7 +27,7 @@ const TripHistoryContainer = () => {
     setSelectedCategory,
     setActivePage,
     handleChangePage,
-    handleClickSearch
+    handleClickSearch,
   } = useTripHistory();
 
   const tripHistoryListData = queryResultFetch.data?.data || [];
@@ -72,7 +73,9 @@ const TripHistoryContainer = () => {
         </div>
       </div>
 
-      <div className="mt-20">
+      <div
+        className={cn("mt-20", totalPages > 1 ? "opacity-100" : "opacity-0")}
+      >
         <Pagination
           totalPages={totalPages}
           activePage={activePage}

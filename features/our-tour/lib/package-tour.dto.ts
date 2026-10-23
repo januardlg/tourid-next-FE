@@ -19,6 +19,7 @@ export interface IActivity {
 }
 
 export interface PackageTourProductDTO {
+    imageUrl?: string,
     packageId: number,
     namePackage: string,
     cost: string,
